@@ -1,6 +1,7 @@
 lazy val commonSettings = Seq (
-  scalaOrganization := "org.typelevel",
-  scalaVersion := "2.12.2-bin-typelevel-4"
+  /*scalaOrganization := "org.typelevel",
+  scalaVersion := "2.12.2-bin-typelevel-4"*/
+  scalaVersion := "2.12.2"
 )
 
 lazy val `laws` = (project in file(".")).settings(commonSettings: _*)
@@ -14,5 +15,11 @@ scalacOptions ++= Seq (
   "-deprecation",
   "-target:jvm-1.8"
 )
+
+libraryDependencies ++= Seq(
+  "org.scalacheck" %% "scalacheck" % "1.13.5" % "test"
+)
+
+scalacOptions in Test ++= Seq("-Yrangepos")
 
 logLevel := Level.Info
