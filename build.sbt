@@ -1,7 +1,6 @@
 lazy val commonSettings = Seq (
-  /*scalaOrganization := "org.typelevel",
-  scalaVersion := "2.12.2-bin-typelevel-4"*/
-  scalaVersion := "2.12.2"
+  scalaOrganization in ThisBuild := "org.typelevel",
+  scalaVersion := "2.12.2-bin-typelevel-4"
 )
 
 lazy val `laws` = (project in file(".")).settings(commonSettings: _*)
