@@ -1,11 +1,16 @@
-import MonadLaws._
+import scala.language.higherKinds
+
 import org.scalacheck._
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 import Arbitrary.arbitrary
 
-import scala.language.higherKinds
+import MonadLaws.MonadInstances._
+import MonadLaws.Monad
+import MonadLaws.Laws
+import MonadLaws.LawsNoInfix
+import MonadLaws.Id
 
 sealed abstract class MonadLawsCheck[M[_]](name: String)(
   implicit MO: Monad[M],
@@ -25,7 +30,6 @@ sealed abstract class MonadLawsCheck[M[_]](name: String)(
   property(" Associativity") = forAll {
     (ma: M[Int], f: Int => M[String], g: String => M[Boolean]) => Laws.associativity(MO)(ma)(f)(g)
   }
-
 
   property(" Left identity No Infix") = forAll {
     (a: Int, f: Int => M[Int]) => LawsNoInfix.leftIdentity(MO)(a)(f)
