@@ -14,19 +14,21 @@ object MonoidLaws {
 
     def newInstance[A](z: A, SA: Semigroup[A]): Monoid[A] =
       new Monoid[A] {
-        def append: (A, A) => A = SA.append
+        def combine: (A, A) => A = SA.combine
         def zero: A = z
       }
   }
 
   sealed trait Laws extends SemigroupLaws.Laws {
     def zeroIdentity[A](a: A)(implicit MA: Monoid[A]): Boolean =
-      (a |+| MA.zero) == a && a == (MA.zero |+| a)
+      (a |+| MA.zero) == a && 
+      (MA.zero |+| a) == a
   }
 
   sealed trait LawsNoInfix extends SemigroupLaws.LawsNoInfix {
     def zeroIdentity[A](a: A)(implicit MA: Monoid[A]): Boolean =
-      MA.append(a, MA.zero) == a && a == MA.append(MA.zero, a)
+      MA.combine(a, MA.zero) == a && 
+      MA.combine(MA.zero, a) == a
   }
 
   object Laws extends Laws

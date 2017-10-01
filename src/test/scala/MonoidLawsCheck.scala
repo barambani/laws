@@ -17,19 +17,19 @@ sealed abstract class MonoidLawsCheck[A](name: String)(
     (a: A) => Laws.zeroIdentity(a)
   }
 
-  property(" Append Associativity") = forAll {
-    (a1: A, a2: A, a3: A) => Laws.appendAssociativity(a1, a2, a3)
+  property(" Combine Associativity") = forAll {
+    (a1: A, a2: A, a3: A) => Laws.combineAssociativity(a1, a2, a3)
   }
 
   property(" Zero Identity No Infix") = forAll {
     (a: A) => LawsNoInfix.zeroIdentity(a)
   }
 
-  property(" Append Associativity No Infix") = forAll {
-    (a1: A, a2: A, a3: A) => LawsNoInfix.appendAssociativity(a1, a2, a3)
+  property(" Combine Associativity No Infix") = forAll {
+    (a1: A, a2: A, a3: A) => LawsNoInfix.combineAssociativity(a1, a2, a3)
   }
 }
 
 object IntWithAddMonoidLawsCheck extends MonoidLawsCheck[Int]("Int With Addition")
-object StringWithAppendMonoidLawsCheck extends MonoidLawsCheck[String]("String With Concatenation")
-object ListOfIntWithAppendMonoidLawsCheck extends MonoidLawsCheck[List[Int]]("List Of Int With Concatenation")
+object StringWithConcatMonoidLawsCheck extends MonoidLawsCheck[String]("String With Concatenation")
+object ListOfIntWithConcatMonoidLawsCheck extends MonoidLawsCheck[List[Int]]("List Of Int With Concatenation")
