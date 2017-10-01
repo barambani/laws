@@ -4,8 +4,6 @@ import org.scalacheck._
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-import Arbitrary.arbitrary
-
 import MonadLaws.MonadInstances._
 import MonadLaws.Monad
 import MonadLaws.Laws
@@ -13,10 +11,11 @@ import MonadLaws.LawsNoInfix
 import MonadLaws.Id
 
 sealed abstract class MonadLawsCheck[M[_]](name: String)(
-  implicit MO: Monad[M],
-  AMI: Arbitrary[M[Int]],
-  AMS: Arbitrary[M[String]],
-  AMB: Arbitrary[M[Boolean]]
+  implicit 
+    MO: Monad[M],
+    AMI: Arbitrary[M[Int]],
+    AMS: Arbitrary[M[String]],
+    AMB: Arbitrary[M[Boolean]]
 ) extends Properties(s"$name Monad Laws Check") {
 
   property(" Left identity") = forAll {

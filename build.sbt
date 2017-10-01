@@ -1,17 +1,23 @@
-lazy val commonSettings = Seq (
-  scalaOrganization in ThisBuild := "org.typelevel",
-  scalaVersion := "2.12.2-bin-typelevel-4"
+inThisBuild(Seq(
+  scalaOrganization := "org.typelevel",
+  scalaVersion := "2.12.3-bin-typelevel-4"
+))
+
+lazy val prjcSettings = Seq (
+  version := "1.0.0",
+  name := "Laws"
 )
 
-lazy val `laws` = (project in file(".")).settings(commonSettings: _*)
-
-initialCommands := """
-  import MonadLaws._
-"""
+lazy val `laws` = (project in file(".")).settings(prjcSettings: _*)
 
 scalacOptions ++= Seq (
   "-feature",
   "-deprecation",
+  "-Ywarn-unused-import",
+  "-unchecked",
+  "-Yno-adapted-args",
+  "-Ywarn-value-discard",
+  "-Ywarn-dead-code",
   "-target:jvm-1.8"
 )
 

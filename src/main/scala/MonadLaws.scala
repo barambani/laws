@@ -26,12 +26,10 @@ object MonadLaws {
     def rightIdentity[M[_], A](implicit MO: Monad[M]): M[A] => Boolean =
       ma => (ma >>= { a => MO.unit(a) }) == ma
 
-    def associativity[M[_], A, B, C](implicit MO: Monad[M]): M[A] => (A => M[B]) => (B => M[C]) => Boolean =
+    def associativity[M[_]: Monad, A, B, C]: M[A] => (A => M[B]) => (B => M[C]) => Boolean =
       ma => f => g => (ma >>= f >>= g) == (ma >>= (f(_) >>= g))
   }
   
-  object Laws extends Laws
-
   sealed trait LawsNoInfix {
 
     def leftIdentity[M[_], A](implicit MO: Monad[M]): A => (A => M[A]) => Boolean =
@@ -44,6 +42,7 @@ object MonadLaws {
       ma => f => g => MO.bind(MO.bind(ma) { f }) { g } == MO.bind(ma) { a => MO.bind(f(a)) { g } }
   }
   
+  object Laws extends Laws
   object LawsNoInfix extends LawsNoInfix
 
   object MonadInstances {
