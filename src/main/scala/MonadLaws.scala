@@ -13,7 +13,7 @@ object MonadLaws {
     def apply[M[_]](implicit MON: Monad[M]): Monad[M] = MON
   }
 
-  implicit class MonadSyntax[M[_]: Monad, A](ma: M[A]) {
+  implicit final class MonadSyntax[M[_]: Monad, A](ma: M[A]) {
     def >>=[B](f: A => M[B]): M[B] = 
       Monad[M].bind(ma) { f } 
   }
