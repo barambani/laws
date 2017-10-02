@@ -2,6 +2,8 @@ import scala.language.higherKinds
 
 object FunctorLaws {
 
+  type FuncFromIntTo[+R] = Function1[Int, R]
+
   trait Functor[F[_]] {
     def map[A, B]: F[A] => (A => B) => F[B]
   }
@@ -50,5 +52,10 @@ object FunctorLaws {
           fa => f => fa map f
       }
 
+    implicit lazy val functionFromIntFunctor: Functor[FuncFromIntTo] =
+      new Functor[FuncFromIntTo] {
+        def map[A, B]: FuncFromIntTo[A] => (A => B) => FuncFromIntTo[B] =
+          fa => f => f compose fa.apply
+      }
   }
 }
