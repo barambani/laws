@@ -2,8 +2,6 @@ import scala.language.higherKinds
 
 object FunctorLaws {
 
-  type FuncFromIntTo[+R] = Function1[Int, R]
-
   trait Functor[F[_]] {
     def map[A, B]: F[A] => (A => B) => F[B]
   }
@@ -39,7 +37,17 @@ object FunctorLaws {
   object LawsNoInfix extends LawsNoInfix
 
   object FunctorInstances {
-  
+
+    final case class FuncFromIntTo[+R](private val f: Int => R) extends Function1[Int, R] {
+      override def apply(i: Int): R = f(i)
+      override def equals(other: Any): Boolean = 
+        other match {
+          case o: FuncFromIntTo[R] => 
+            this.f(0) == o.f(0) && this.f(Int.MaxValue) == o.f(Int.MaxValue)
+          case _ => false
+        }
+    }
+
     implicit lazy val seqFunctor: Functor[Seq] = 
       new Functor[Seq] {
         def map[A, B]: Seq[A] => (A => B) => Seq[B] =
@@ -55,7 +63,8 @@ object FunctorLaws {
     implicit lazy val functionFromIntFunctor: Functor[FuncFromIntTo] =
       new Functor[FuncFromIntTo] {
         def map[A, B]: FuncFromIntTo[A] => (A => B) => FuncFromIntTo[B] =
-          fa => f => f compose fa.apply
+          fa => f => FuncFromIntTo[B](f compose fa.apply)
+          //fa => f => f compose fa.apply
       }
   }
 }
