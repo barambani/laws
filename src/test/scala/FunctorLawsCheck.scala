@@ -38,3 +38,4 @@ sealed abstract class FunctorLawsCheck[F[_]](name: String)(
 object SequenceFunctorLawsCheck extends FunctorLawsCheck[Seq]("Sequence")
 object OptionFunctorLawsCheck extends FunctorLawsCheck[Option]("Option")
 object FunctionFromIntFunctorLawsCheck extends FunctorLawsCheck[FuncFromIntTo]("Function From Int")
+object TreeFunctorLawsCheck extends FunctorLawsCheck[Tree]("Tree")

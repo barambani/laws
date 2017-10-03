@@ -48,6 +48,10 @@ object FunctorLaws {
         }
     }
 
+    sealed trait Tree[+A]
+    final case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+    final case class Leaf[A](v: A) extends Tree[A]
+
     implicit lazy val seqFunctor: Functor[Seq] = 
       new Functor[Seq] {
         def map[A, B]: Seq[A] => (A => B) => Seq[B] =
@@ -64,7 +68,15 @@ object FunctorLaws {
       new Functor[FuncFromIntTo] {
         def map[A, B]: FuncFromIntTo[A] => (A => B) => FuncFromIntTo[B] =
           fa => f => FuncFromIntTo[B](f compose fa.apply)
-          //fa => f => f compose fa.apply
+      }
+
+    implicit lazy val treeFunctor: Functor[Tree] =
+      new Functor[Tree] {
+        def map[A, B]: Tree[A] => (A => B) => Tree[B] =
+          fa => f => fa match {
+            case Branch(l, r) => Branch(map(l)(f), map(r)(f))
+            case Leaf(v) => (Leaf.apply[B] _ compose f)(v)
+          }
       }
   }
 }
