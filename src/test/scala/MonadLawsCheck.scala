@@ -8,7 +8,6 @@ import MonadLaws.MonadInstances._
 import MonadLaws.Monad
 import MonadLaws.Laws
 import MonadLaws.LawsNoInfix
-import MonadLaws.Id
 
 sealed abstract class MonadLawsCheck[M[_]](name: String)(
   implicit 

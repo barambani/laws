@@ -42,8 +42,10 @@ object FunctorLaws {
       override def apply(i: Int): R = f(i)
       override def equals(other: Any): Boolean = 
         other match {
-          case o: FuncFromIntTo[R] => 
-            this.f(0) == o.f(0) && this.f(Int.MaxValue) == o.f(Int.MaxValue)
+          case o: FuncFromIntTo[R] =>
+            this.f(0) == o.f(0) &&
+            this.f(Int.MaxValue) == o.f(Int.MaxValue) &&
+            this.f(Int.MinValue) == o.f(Int.MinValue)
           case _ => false
         }
     }

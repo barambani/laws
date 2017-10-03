@@ -2,8 +2,6 @@ import scala.language.higherKinds
 
 object MonadLaws {
 
-  type Id[A] = A 
-
   trait Monad[M[_]] {
     def unit[A]: A => M[A]
     def bind[A, B]: M[A] => (A => M[B]) => M[B]
@@ -46,6 +44,8 @@ object MonadLaws {
   object LawsNoInfix extends LawsNoInfix
 
   object MonadInstances {
+
+    type Id[A] = A 
   
     implicit def listMonad[A]: Monad[List] = new Monad[List] {
       def unit[A]: A => List[A] = 
