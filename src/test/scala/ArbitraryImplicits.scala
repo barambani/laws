@@ -1,6 +1,6 @@
 import org.scalacheck.Arbitrary
 
-import org.scalacheck.Gen
+import shapeless.Lazy
 
 import Algebra.FuncFromIntTo
 import Algebra.{Tree, Branch, Leaf}
@@ -8,30 +8,36 @@ import Algebra.{Tree, Branch, Leaf}
 object ArbitraryImplicits {
 
   implicit def funcFromIntToArb[A](implicit AR: Arbitrary[A]): Arbitrary[FuncFromIntTo[A]] =
-    Arbitrary[FuncFromIntTo[A]] {
-      Arbitrary.arbitrary[A] map { a => FuncFromIntTo(_ => a) }
+    Arbitrary {
+      AR.arbitrary map { a => FuncFromIntTo(_ => a) }
     }
 
-  implicit def treeArb[A](implicit AR: Arbitrary[A]): Arbitrary[Tree[A]] =
-    Arbitrary[Tree[A]] {
+  implicit def branchArb[A](
+    implicit 
+      TRAR: Lazy[Arbitrary[Tree[A]]]): Arbitrary[Branch[A]] =
+    Arbitrary {
+      for {
+        l <- TRAR.value.arbitrary
+        r <- TRAR.value.arbitrary
+      } yield Branch(l, r)
+    }
 
-      def randomChoice: Gen[Boolean] =
-        Gen.choose(1,10) map (_ <= 5)
-      
-      def branchGen: Gen[Tree[A]] =
-        for {
-          l <- treeGen
-          r <- treeGen
-        } yield Branch(l, r)
+  implicit def leafArb[A](
+    implicit 
+      AR: Arbitrary[A]): Arbitrary[Leaf[A]] =
+    Arbitrary {
+      AR.arbitrary map Leaf.apply
+    }
 
-      def leafGen: Gen[Tree[A]] = 
-        Arbitrary.arbitrary[A] map Leaf.apply
-
-      def treeGen: Gen[Tree[A]] =
-        randomChoice flatMap {
-          if(_) leafGen else branchGen
-        }
-
-      treeGen
+  implicit def treeArb[A](
+    implicit
+      AR: Arbitrary[Boolean],
+      LAR: Lazy[Arbitrary[Leaf[A]]],
+      BAR: Lazy[Arbitrary[Branch[A]]]): Arbitrary[Tree[A]] =
+    Arbitrary {
+      AR.arbitrary flatMap { 
+        if(_) LAR.value.arbitrary 
+        else  BAR.value.arbitrary 
+      } 
     }
 }
