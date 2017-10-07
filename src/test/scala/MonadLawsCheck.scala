@@ -4,6 +4,7 @@ import org.scalacheck._
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
+import Algebra.Id
 import MonadLaws.MonadInstances._
 import MonadLaws.Monad
 import MonadLaws.Laws

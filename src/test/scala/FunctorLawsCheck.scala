@@ -4,7 +4,8 @@ import org.scalacheck._
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-import FunctorLaws.FunctorInstances.FuncFromIntTo
+import Algebra.Tree
+import Algebra.FuncFromIntTo
 import FunctorLaws.Functor
 import FunctorLaws.Laws
 import FunctorLaws.LawsNoInfix

@@ -1,10 +1,15 @@
 import scala.language.higherKinds
 
+import Algebra.Id
+import FunctorLaws.Functor
+
 object MonadLaws {
 
-  trait Monad[M[_]] {
+  trait Monad[M[_]] extends Functor[M]  {
     def unit[A]: A => M[A]
     def bind[A, B]: M[A] => (A => M[B]) => M[B]
+    def map[A, B]: M[A] => (A => B) => M[B] =
+      ma => f => bind(ma) { a => (unit compose f)(a) }
   }
 
   object Monad {
@@ -45,25 +50,29 @@ object MonadLaws {
 
   object MonadInstances {
 
-    type Id[A] = A 
-  
     implicit def listMonad[A]: Monad[List] = new Monad[List] {
+      
       def unit[A]: A => List[A] = 
         _ :: Nil
+      
       def bind[A, B]: List[A] => (A => List[B]) => List[B] =
         ma => f => ma flatMap f
     }
 
     implicit def optionMonad[A]: Monad[Option] = new Monad[Option] {
+      
       def unit[A]: A => Option[A] = 
         Some(_)
+      
       def bind[A, B]: Option[A] => (A => Option[B]) => Option[B] = 
         ma => f => ma flatMap f
     }
 
     implicit def idMonad[A]: Monad[Id] = new Monad[Id] {
+      
       def unit[A]: A => Id[A] = 
         a => a
+      
       def bind[A, B]: Id[A] => (A => Id[B]) => Id[B] =
         ma => f => f(ma)
     }

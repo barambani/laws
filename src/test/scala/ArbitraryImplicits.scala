@@ -1,8 +1,9 @@
 import org.scalacheck.Arbitrary
 
 import org.scalacheck.Gen
-import FunctorLaws.FunctorInstances.FuncFromIntTo
-import FunctorLaws.FunctorInstances.{Tree, Branch, Leaf}
+
+import Algebra.FuncFromIntTo
+import Algebra.{Tree, Branch, Leaf}
 
 object ArbitraryImplicits {
 
