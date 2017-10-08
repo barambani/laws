@@ -6,7 +6,11 @@ import Algebra.FuncFromIntTo
 object FunctorLaws {
 
   trait Functor[F[_]] {
+    
     def map[A, B]: F[A] => (A => B) => F[B]
+    
+    def lift[A, B]: (A => B) => F[A] => F[B] =
+      f => fa => map(fa)(f)
   }
 
   object Functor {
@@ -21,7 +25,7 @@ object FunctorLaws {
   sealed trait Laws {
     
     def mapPreservesIdentity[F[_]: Functor, A]: F[A] => Boolean =
-      fa => (fa map (a => a)) == fa
+      fa => (fa map identity[A]) == fa
 
     def mapPreservesComposition[F[_]: Functor, A, B, C]: F[A] => (A => B) => (B => C) => Boolean =
       fa => f => g => (fa map (g compose f)) == (fa map f map g)
@@ -30,7 +34,7 @@ object FunctorLaws {
   sealed trait LawsNoInfix {
   
     def mapPreservesIdentity[F[_], A](implicit FF: Functor[F]): F[A] => Boolean =
-      fa => FF.map(fa)(a => a) == fa
+      fa => FF.map(fa)(identity[A]) == fa
 
     def mapPreservesComposition[F[_], A, B, C](implicit FF: Functor[F]): F[A] => (A => B) => (B => C) => Boolean =
       fa => f => g => FF.map(fa)(g compose f) == FF.map(FF.map(fa)(f))(g)

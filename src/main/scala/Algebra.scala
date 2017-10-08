@@ -17,4 +17,31 @@ object Algebra {
   sealed trait Tree[+A]
   final case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
   final case class Leaf[A](v: A) extends Tree[A]
+
+  trait Show[A] {
+    def show: A => String
+    override def equals(other: Any): Boolean = 
+      other match {
+        case o: Show[A] => true
+        case _ => false
+      }
+  }
+  object Show {
+    
+    def apply[A](implicit INST: Show[A]): Show[A] = INST
+    def newInstance[A]: (A => String) => Show[A] =
+      f => new Show[A] {
+        def show: A => String = f
+      }
+
+    implicit lazy val showInt: Show[Int] = new Show[Int] {
+      def show: Int => String = _.toString
+    }
+
+    implicit lazy val showBoolean: Show[Boolean] = new Show[Boolean] {
+      def show: Boolean => String = _.toString
+    }
+  }
+
+  final case class Box[A](value: A)
 }

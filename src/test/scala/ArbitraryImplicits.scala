@@ -4,10 +4,16 @@ import shapeless.Lazy
 
 import Algebra.FuncFromIntTo
 import Algebra.{Tree, Branch, Leaf}
+import Algebra.Show
+import Algebra.Box
+import ContravariantLaws.Contravariant
+import ContravariantLaws.ContravariantSyntax
 
 object ArbitraryImplicits {
 
-  implicit def funcFromIntToArb[A](implicit AR: Arbitrary[A]): Arbitrary[FuncFromIntTo[A]] =
+  implicit def funcFromIntToArb[A](
+    implicit 
+      AR: Arbitrary[A]): Arbitrary[FuncFromIntTo[A]] =
     Arbitrary {
       AR.arbitrary map { a => FuncFromIntTo(_ => a) }
     }
@@ -32,12 +38,33 @@ object ArbitraryImplicits {
   implicit def treeArb[A](
     implicit
       AR: Arbitrary[Boolean],
-      LAR: Lazy[Arbitrary[Leaf[A]]],
+      LAR: Arbitrary[Leaf[A]],
       BAR: Lazy[Arbitrary[Branch[A]]]): Arbitrary[Tree[A]] =
     Arbitrary {
       AR.arbitrary flatMap { 
-        if(_) LAR.value.arbitrary 
+        if(_) LAR.arbitrary 
         else  BAR.value.arbitrary 
       } 
+    }
+
+  implicit def showArb[A](
+    implicit 
+      AR: Arbitrary[A],
+      SH: Show[A]): Arbitrary[Show[A]] =
+    Arbitrary(SH)
+
+  implicit def boxArb[A](
+    implicit
+      AS: Arbitrary[Show[A]],
+      CA: Contravariant[Show]): Arbitrary[Show[Box[A]]] =
+    Arbitrary {
+      AS.arbitrary map { sa => sa contramap (_.value) }
+    }
+
+  implicit def stringToBox[A](
+    implicit
+      AB: Arbitrary[Boolean]): Arbitrary[A => Box[Boolean]] =
+    Arbitrary {
+	AB.arbitrary map { b => (a: A) => Box(b) }
     }
 }
