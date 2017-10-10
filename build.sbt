@@ -1,6 +1,5 @@
 inThisBuild(Seq(
-  scalaOrganization := "org.typelevel",
-  scalaVersion := "2.12.3-bin-typelevel-4"
+  scalaVersion := "2.12.3"
 ))
 
 lazy val prjcSettings = Seq (

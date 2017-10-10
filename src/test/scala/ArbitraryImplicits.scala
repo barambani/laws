@@ -61,10 +61,10 @@ object ArbitraryImplicits {
       AS.arbitrary map { sa => sa contramap (_.value) }
     }
 
-  implicit def stringToBox[A](
+  implicit def aToBox[A](
     implicit
       AB: Arbitrary[Boolean]): Arbitrary[A => Box[Boolean]] =
     Arbitrary {
-	AB.arbitrary map { b => (a: A) => Box(b) }
+      AB.arbitrary map { b => (a: A) => Box(b) }
     }
 }

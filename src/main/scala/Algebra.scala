@@ -23,9 +23,10 @@ object Algebra {
     override def equals(other: Any): Boolean = 
       other match {
         case o: Show[A] => true
-        case _ => false
+        case _          => false
       }
   }
+  
   object Show {
     
     def apply[A](implicit INST: Show[A]): Show[A] = INST
@@ -44,4 +45,17 @@ object Algebra {
   }
 
   final case class Box[A](value: A)
+
+  sealed trait Codec[A] {
+    def encode: A => String
+    def decode: String => Option[A]
+  }
+
+  object Codec {
+    def newInstance[A]: (A => String) => (String => Option[A]) => Codec[A] =
+      f => g => new Codec[A] {
+        def encode = f
+        def decode = g
+      }
+  }
 }

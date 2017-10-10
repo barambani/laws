@@ -1,17 +1,13 @@
 import scala.language.higherKinds
 
-import org.scalacheck._
-import org.scalacheck.Properties
-import org.scalacheck.Prop.forAll
-
+import Algebra.{Box, Show}
+import Algebra.Show._
+import ArbitraryImplicits._
+import ContravariantLaws.{Laws, LawsNoInfix}
 import ContravariantLaws.Contravariant
 import ContravariantLaws.Instances._
-import ContravariantLaws.Laws
-import ContravariantLaws.LawsNoInfix
-import Algebra.Show
-import Algebra.Show._
-import Algebra.Box
-import ArbitraryImplicits._
+import org.scalacheck._
+import org.scalacheck.Prop.forAll
 
 sealed abstract class ContravariantLawsCheck[F[_], A](name: String)(
   implicit
