@@ -1,5 +1,6 @@
 import org.scalacheck.Arbitrary
 import org.scalacheck.Cogen
+import org.scalacheck.Gen
 
 import shapeless.Lazy
 
@@ -21,6 +22,9 @@ object ArbitraryImplicits {
       AR.arbitrary map { a => FuncFromIntTo(_ => a) }
     }
 
+  implicit def treeChooser: Arbitrary[Boolean] =
+    Arbitrary{ Gen.choose(1, 10) map (_ <= 6) }
+
   implicit def branchArb[A](
     implicit 
       TRAR: Lazy[Arbitrary[Tree[A]]]): Arbitrary[Branch[A]] =
@@ -40,11 +44,10 @@ object ArbitraryImplicits {
 
   implicit def treeArb[A](
     implicit
-      AR: Arbitrary[Boolean],
       LAR: Arbitrary[Leaf[A]],
       BAR: Lazy[Arbitrary[Branch[A]]]): Arbitrary[Tree[A]] =
     Arbitrary {
-      AR.arbitrary flatMap { 
+      treeChooser.arbitrary flatMap { 
         if(_) LAR.arbitrary 
         else  BAR.value.arbitrary 
       } 
