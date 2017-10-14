@@ -1,4 +1,5 @@
 import org.scalacheck.Arbitrary
+import org.scalacheck.Cogen
 
 import shapeless.Lazy
 
@@ -6,6 +7,8 @@ import Algebra.FuncFromIntTo
 import Algebra.{Tree, Branch, Leaf}
 import Algebra.Show
 import Algebra.Box
+import Algebra.Symbol
+import Algebra.Codec
 import ContravariantLaws.Contravariant
 import ContravariantLaws.ContravariantSyntax
 
@@ -49,7 +52,6 @@ object ArbitraryImplicits {
 
   implicit def showArb[A](
     implicit 
-      AR: Arbitrary[A],
       SH: Show[A]): Arbitrary[Show[A]] =
     Arbitrary(SH)
 
@@ -67,4 +69,23 @@ object ArbitraryImplicits {
     Arbitrary {
       AB.arbitrary map { b => (a: A) => Box(b) }
     }
+
+  implicit def symbol(implicit AS: Arbitrary[String]): Arbitrary[Symbol] =
+    Arbitrary { AS.arbitrary map Symbol.apply }
+
+  implicit def symbolCodec(
+    implicit
+      CS: Codec[Symbol]): Arbitrary[Codec[Symbol]] =
+    Arbitrary(CS)
+
+  implicit def symbolCogen: Cogen[Symbol] =
+    Cogen[Symbol]((s: Symbol) => s.name.size.toLong)
+
+  implicit def symbolToInt(
+    implicit
+      AI: Arbitrary[Int]): Arbitrary[Symbol => Int] =
+    Arbitrary.arbFunction1[Symbol, Int]
+
+  implicit def intToSymbol: Arbitrary[Int => Symbol] =
+    Arbitrary.arbFunction1[Int, Symbol]
 }

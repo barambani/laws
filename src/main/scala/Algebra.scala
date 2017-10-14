@@ -45,10 +45,17 @@ object Algebra {
   }
 
   final case class Box[A](value: A)
+  final case class Symbol(name: String)
 
   sealed trait Codec[A] {
     def encode: A => String
     def decode: String => Option[A]
+
+    override def equals(other: Any): Boolean = 
+      other match {
+        case o: Codec[A]  => true
+        case _            => false
+      }
   }
 
   object Codec {
@@ -57,5 +64,8 @@ object Algebra {
         def encode = f
         def decode = g
       }
+
+    implicit lazy val symbolCodec: Codec[Symbol] =
+      newInstance[Symbol](_.name)(n => Some(Symbol(n)))
   }
 }
