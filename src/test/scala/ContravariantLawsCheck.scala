@@ -3,9 +3,9 @@ import scala.language.higherKinds
 import Algebra.{Box, Show}
 import Algebra.Show._
 import ArbitraryImplicits._
-import ContravariantLaws.{Laws, LawsNoInfix}
-import ContravariantLaws.Contravariant
-import ContravariantLaws.Instances._
+import ContravariantModule.{Laws, LawsNoInfix}
+import ContravariantModule.Contravariant
+import ContravariantModule.Instances._
 import org.scalacheck._
 import org.scalacheck.Prop.forAll
 

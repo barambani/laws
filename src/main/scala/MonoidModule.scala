@@ -1,8 +1,8 @@
-import SemigroupLaws.Semigroup
-import SemigroupLaws.SemigroupSyntax
-import SemigroupLaws.SemigroupInstances._
+import SemigroupModule.Semigroup
+import SemigroupModule.SemigroupSyntax
+import SemigroupModule.SemigroupInstances._
 
-object MonoidLaws {
+object MonoidModule {
 
   trait Monoid[A] extends Semigroup[A] {
     def zero: A
@@ -19,13 +19,13 @@ object MonoidLaws {
       }
   }
 
-  sealed trait Laws extends SemigroupLaws.Laws {
+  sealed trait Laws extends SemigroupModule.Laws {
     def zeroIdentity[A](a: A)(implicit MA: Monoid[A]): Boolean =
       (a |+| MA.zero) == a && 
       (MA.zero |+| a) == a
   }
 
-  sealed trait LawsNoInfix extends SemigroupLaws.LawsNoInfix {
+  sealed trait LawsNoInfix extends SemigroupModule.LawsNoInfix {
     def zeroIdentity[A](a: A)(implicit MA: Monoid[A]): Boolean =
       MA.combine(a, MA.zero) == a && 
       MA.combine(MA.zero, a) == a
@@ -36,13 +36,13 @@ object MonoidLaws {
 
   object MonoidInstances {
     
-    implicit lazy val intWithAdditionM: Monoid[Int] =
+    implicit val intWithAdditionM: Monoid[Int] =
       Monoid.newInstance(0, intWithAdditionS)
 
-    implicit lazy val stringWithConcatM: Monoid[String] =
+    implicit val stringWithConcatM: Monoid[String] =
       Monoid.newInstance("", stringWithConcatS)
 
-    implicit lazy val listOfIntWithAppendM: Monoid[List[Int]] =
+    implicit val listOfIntWithAppendM: Monoid[List[Int]] =
       Monoid.newInstance(Nil: List[Int], listOfIntWithAppendS)
   }
 }

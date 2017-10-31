@@ -2,7 +2,7 @@ import scala.language.higherKinds
 
 import Algebra.Show
 
-object ContravariantLaws {
+object ContravariantModule {
 
   trait Contravariant[F[_]] {
     
@@ -44,13 +44,12 @@ object ContravariantLaws {
 
   object Instances {
   
-    implicit lazy val showContravariant: Contravariant[Show] = 
+    implicit val showContravariant: Contravariant[Show] = 
       new Contravariant[Show] {
         def contramap[A, B]: Show[B] => (A => B) => Show[A] =
           sb => f => Show.newInstance[A] {
             a => (sb.show compose f)(a) 
           }
       }
-
   }
 }

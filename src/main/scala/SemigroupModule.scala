@@ -1,4 +1,4 @@
-object SemigroupLaws {
+object SemigroupModule {
 
   trait Semigroup[A] {
     def combine: (A, A) => A
@@ -33,13 +33,13 @@ object SemigroupLaws {
 
   object SemigroupInstances {
     
-    implicit def intWithAdditionS: Semigroup[Int] =
+    implicit val intWithAdditionS: Semigroup[Int] =
       Semigroup.newInstance[Int](_ + _)
 
-    implicit def stringWithConcatS: Semigroup[String] =
+    implicit val stringWithConcatS: Semigroup[String] =
       Semigroup.newInstance[String](_ ++ _)
 
-    implicit def listOfIntWithAppendS: Semigroup[List[Int]] =
+    implicit val listOfIntWithAppendS: Semigroup[List[Int]] =
       Semigroup.newInstance[List[Int]](_ ++ _)
   }
 }

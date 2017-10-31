@@ -2,10 +2,10 @@ import scala.language.higherKinds
 
 import org.scalacheck._
 import org.scalacheck.Prop.forAll
-import InvariantLaws.Invariant
-import InvariantLaws.Laws
-import InvariantLaws.LawsNoInfix
-import InvariantLaws.Instances._
+import InvariantModule.Invariant
+import InvariantModule.Laws
+import InvariantModule.LawsNoInfix
+import InvariantModule.Instances._
 import Algebra.Codec
 import Algebra.Symbol
 import ArbitraryImplicits._

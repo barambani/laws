@@ -25,7 +25,8 @@ abstract class FunctorLawsCheck[F[_]](name: String)(
   }
 
   property(" Functor's Map Preserves Composition") = forAll {
-    (fa: F[Int], f: Int => String, g: String => Boolean) => Laws.mapPreservesComposition(FU)(fa)(f)(g)
+    (fa: F[Int], f: Int => String, g: String => Boolean) => 
+      Laws.mapPreservesComposition(FU)(fa)(f)(g)
   }
 
   property(" Functor's Map Preserves Identity No Infix") = forAll {
@@ -33,7 +34,8 @@ abstract class FunctorLawsCheck[F[_]](name: String)(
   }
 
   property(" Functor's Map Preserves Composition No Infix") = forAll {
-    (fa: F[String], f: String => Int, g: Int => Boolean) => LawsNoInfix.mapPreservesComposition(FU)(fa)(f)(g)
+    (fa: F[String], f: String => Int, g: Int => Boolean) => 
+      LawsNoInfix.mapPreservesComposition(FU)(fa)(f)(g)
   }
 }
 

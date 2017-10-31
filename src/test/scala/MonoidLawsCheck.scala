@@ -2,10 +2,10 @@ import org.scalacheck._
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-import MonoidLaws.Monoid
-import MonoidLaws.Laws
-import MonoidLaws.LawsNoInfix
-import MonoidLaws.MonoidInstances._
+import MonoidModule.Monoid
+import MonoidModule.Laws
+import MonoidModule.LawsNoInfix
+import MonoidModule.MonoidInstances._
 
 sealed abstract class MonoidLawsCheck[A](name: String)(
   implicit

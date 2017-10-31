@@ -29,7 +29,8 @@ sealed abstract class MonadLawsCheck[M[_]](name: String)(
   }
 
   property(" Associativity") = forAll {
-    (ma: M[Int], f: Int => M[String], g: String => M[Boolean]) => Laws.associativity(MO)(ma)(f)(g)
+    (ma: M[Int], f: Int => M[String], g: String => M[Boolean]) => 
+      Laws.associativity(MO)(ma)(f)(g)
   }
 
   property(" Left identity No Infix") = forAll {
@@ -41,7 +42,8 @@ sealed abstract class MonadLawsCheck[M[_]](name: String)(
   }
 
   property(" Associativity No Infix") = forAll {
-    (ma: M[Int], f: Int => M[String], g: String => M[Boolean]) => LawsNoInfix.associativity(MO)(ma)(f)(g)
+    (ma: M[Int], f: Int => M[String], g: String => M[Boolean]) => 
+      LawsNoInfix.associativity(MO)(ma)(f)(g)
   }
 }
 

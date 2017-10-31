@@ -10,8 +10,8 @@ import Algebra.Show
 import Algebra.Box
 import Algebra.Symbol
 import Algebra.Codec
-import ContravariantLaws.Contravariant
-import ContravariantLaws.ContravariantSyntax
+import ContravariantModule.Contravariant
+import ContravariantModule.ContravariantSyntax
 
 object ArbitraryImplicits {
 

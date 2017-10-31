@@ -2,10 +2,10 @@ import org.scalacheck._
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-import SemigroupLaws.Semigroup
-import SemigroupLaws.Laws
-import SemigroupLaws.LawsNoInfix
-import SemigroupLaws.SemigroupInstances._
+import SemigroupModule.Semigroup
+import SemigroupModule.Laws
+import SemigroupModule.LawsNoInfix
+import SemigroupModule.SemigroupInstances._
 
 sealed abstract class SemigroupLawsCheck[A](name: String)(
   implicit

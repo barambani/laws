@@ -2,7 +2,7 @@ import scala.language.higherKinds
 
 import Algebra.Codec
 
-object InvariantLaws {
+object InvariantModule {
 
   trait Invariant[F[_]] {
     
@@ -46,7 +46,7 @@ object InvariantLaws {
 
   object Instances {
   
-    implicit lazy val codecInvarian: Invariant[Codec] = 
+    implicit val codecInvarian: Invariant[Codec] = 
       new Invariant[Codec] {
         def imap[A, B]: Codec[A] => (A => B) => (B => A) => Codec[B] =
           fa => f => g => Codec.newInstance(fa.encode compose g)(s => fa.decode(s) map f)
