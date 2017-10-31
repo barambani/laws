@@ -23,7 +23,7 @@ object FunctorModule {
       f => Functor[F].map(fa)(f)
   }
 
-  sealed trait Laws {
+  trait Laws {
     
     def mapPreservesIdentity[F[_]: Functor, A]: F[A] => Boolean =
       fa => (fa map identity[A]) == fa
@@ -32,7 +32,7 @@ object FunctorModule {
       fa => f => g => (fa map (g compose f)) == (fa map f map g)
   }
 
-  sealed trait LawsNoInfix {
+  trait LawsNoInfix {
   
     def mapPreservesIdentity[F[_], A](implicit FF: Functor[F]): F[A] => Boolean =
       fa => FF.map(fa)(identity[A]) == fa

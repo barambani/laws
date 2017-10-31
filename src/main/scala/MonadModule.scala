@@ -2,7 +2,6 @@ import scala.language.higherKinds
 
 import Algebra.Id
 import Algebra.{Tree, Leaf, Branch}
-import Algebra.FuncFromIntTo
 import FunctorModule.Functor
 
 object MonadModule {
@@ -23,7 +22,7 @@ object MonadModule {
       Monad[M].bind(ma) { f } 
   }
 
-  sealed trait Laws {
+  sealed trait Laws extends FunctorModule.Laws {
   
     def leftIdentity[M[_], A](implicit MO: Monad[M]): A => (A => M[A]) => Boolean =
       a => f => (MO.unit(a) >>= f) == f(a)
@@ -35,7 +34,7 @@ object MonadModule {
       ma => f => g => (ma >>= f >>= g) == (ma >>= (f(_) >>= g))
   }
   
-  sealed trait LawsNoInfix {
+  sealed trait LawsNoInfix extends FunctorModule.LawsNoInfix {
 
     def leftIdentity[M[_], A](implicit MO: Monad[M]): A => (A => M[A]) => Boolean =
       a => f => MO.bind(MO.unit(a)) { f } == f(a)

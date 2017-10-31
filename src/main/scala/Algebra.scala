@@ -22,7 +22,7 @@ object Algebra {
     def show: A => String
     override def equals(other: Any): Boolean = 
       other match {
-        case o: Show[A] => true
+        case _: Show[A] => true
         case _          => false
       }
   }
@@ -53,7 +53,7 @@ object Algebra {
 
     override def equals(other: Any): Boolean = 
       other match {
-        case o: Codec[A]  => true
+        case _: Codec[A]  => true
         case _            => false
       }
   }
