@@ -5,10 +5,12 @@ import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 import Algebra.Id
-import MonadLaws.MonadInstances._
-import MonadLaws.Monad
-import MonadLaws.Laws
-import MonadLaws.LawsNoInfix
+import Algebra.Tree
+import MonadModule.MonadInstances._
+import MonadModule.Monad
+import MonadModule.Laws
+import MonadModule.LawsNoInfix
+import ArbitraryImplicits._
 
 sealed abstract class MonadLawsCheck[M[_]](name: String)(
   implicit 
@@ -46,3 +48,5 @@ sealed abstract class MonadLawsCheck[M[_]](name: String)(
 object IdMonadLawsCheck extends MonadLawsCheck[Id]("Id")
 object ListMonadLawsCheck extends MonadLawsCheck[List]("List")
 object OptionMonadLawsCheck extends MonadLawsCheck[Option]("Option")
+object SequenceMonadLawsCheck extends MonadLawsCheck[Seq]("Sequence")
+object TreeMonadLawsCheck extends MonadLawsCheck[Tree]("Tree")

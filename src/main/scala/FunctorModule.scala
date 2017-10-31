@@ -2,8 +2,9 @@ import scala.language.higherKinds
 
 import Algebra.{Tree, Branch, Leaf}
 import Algebra.FuncFromIntTo
+import Algebra.Id
 
-object FunctorLaws {
+object FunctorModule {
 
   trait Functor[F[_]] {
     
@@ -45,31 +46,43 @@ object FunctorLaws {
 
   object FunctorInstances {
 
-    implicit lazy val seqFunctor: Functor[Seq] = 
+    implicit val seqFunctor: Functor[Seq] = 
       new Functor[Seq] {
         def map[A, B]: Seq[A] => (A => B) => Seq[B] =
           fa => f => fa map f
       }
 
-    implicit lazy val optionFunctor: Functor[Option] =
+    implicit val optionFunctor: Functor[Option] =
       new Functor[Option] {
         def map[A, B]: Option[A] => (A => B) => Option[B] =
           fa => f => fa map f
       }
 
-    implicit lazy val functionFromIntFunctor: Functor[FuncFromIntTo] =
+    implicit val functionFromIntFunctor: Functor[FuncFromIntTo] =
       new Functor[FuncFromIntTo] {
         def map[A, B]: FuncFromIntTo[A] => (A => B) => FuncFromIntTo[B] =
           fa => f => FuncFromIntTo[B](f compose fa.apply)
       }
 
-    implicit lazy val treeFunctor: Functor[Tree] =
+    implicit val treeFunctor: Functor[Tree] =
       new Functor[Tree] {
         def map[A, B]: Tree[A] => (A => B) => Tree[B] =
           fa => f => fa match {
             case Branch(l, r) => Branch(map(l)(f), map(r)(f))
             case Leaf(v) => (Leaf.apply[B] _ compose f)(v)
           }
+      }
+
+    implicit val idFunctor: Functor[Id] =
+      new Functor[Id] {
+        def map[A, B]: Id[A] => (A => B) => Id[B] =
+          fa => f => f(fa)
+      }
+
+    implicit val listFunctor: Functor[List] =
+      new Functor[List] {
+        def map[A, B]: List[A] => (A => B) => List[B] =
+          fa => f => fa map f
       }
   }
 }

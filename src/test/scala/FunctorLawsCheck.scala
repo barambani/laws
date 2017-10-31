@@ -6,13 +6,14 @@ import org.scalacheck.Prop.forAll
 
 import Algebra.Tree
 import Algebra.FuncFromIntTo
-import FunctorLaws.Functor
-import FunctorLaws.Laws
-import FunctorLaws.LawsNoInfix
-import FunctorLaws.FunctorInstances._
+import Algebra.Id
+import FunctorModule.Functor
+import FunctorModule.Laws
+import FunctorModule.LawsNoInfix
+import FunctorModule.FunctorInstances._
 import ArbitraryImplicits._
 
-sealed abstract class FunctorLawsCheck[F[_]](name: String)(
+abstract class FunctorLawsCheck[F[_]](name: String)(
   implicit
     FU: Functor[F],
     AFI: Arbitrary[F[Int]],
@@ -36,7 +37,9 @@ sealed abstract class FunctorLawsCheck[F[_]](name: String)(
   }
 }
 
+object IdFunctorLawsCheck extends FunctorLawsCheck[Id]("Id")
 object SequenceFunctorLawsCheck extends FunctorLawsCheck[Seq]("Sequence")
+object ListFunctorLawsCheck extends FunctorLawsCheck[List]("List")
 object OptionFunctorLawsCheck extends FunctorLawsCheck[Option]("Option")
 object FunctionFromIntFunctorLawsCheck extends FunctorLawsCheck[FuncFromIntTo]("Function From Int")
 object TreeFunctorLawsCheck extends FunctorLawsCheck[Tree]("Tree")

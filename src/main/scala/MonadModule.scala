@@ -1,9 +1,11 @@
 import scala.language.higherKinds
 
 import Algebra.Id
-import FunctorLaws.Functor
+import Algebra.{Tree, Leaf, Branch}
+import Algebra.FuncFromIntTo
+import FunctorModule.Functor
 
-object MonadLaws {
+object MonadModule {
 
   trait Monad[M[_]] extends Functor[M]  {
     def unit[A]: A => M[A]
@@ -50,7 +52,25 @@ object MonadLaws {
 
   object MonadInstances {
 
-    implicit def listMonad[A]: Monad[List] = new Monad[List] {
+    implicit val idMonad: Monad[Id] = new Monad[Id] {
+      
+      def unit[A]: A => Id[A] = 
+        a => a
+      
+      def bind[A, B]: Id[A] => (A => Id[B]) => Id[B] =
+        ma => f => f(ma)
+    }
+    
+    implicit val seqMonad: Monad[Seq] = new Monad[Seq] {
+      
+      def unit[A]: A => Seq[A] = 
+        _ :: Nil
+      
+      def bind[A, B]: Seq[A] => (A => Seq[B]) => Seq[B] =
+        ma => f => ma flatMap f
+    }
+    
+    implicit val listMonad: Monad[List] = new Monad[List] {
       
       def unit[A]: A => List[A] = 
         _ :: Nil
@@ -59,7 +79,7 @@ object MonadLaws {
         ma => f => ma flatMap f
     }
 
-    implicit def optionMonad[A]: Monad[Option] = new Monad[Option] {
+    implicit val optionMonad: Monad[Option] = new Monad[Option] {
       
       def unit[A]: A => Option[A] = 
         Some(_)
@@ -68,13 +88,16 @@ object MonadLaws {
         ma => f => ma flatMap f
     }
 
-    implicit def idMonad[A]: Monad[Id] = new Monad[Id] {
-      
-      def unit[A]: A => Id[A] = 
-        a => a
-      
-      def bind[A, B]: Id[A] => (A => Id[B]) => Id[B] =
-        ma => f => f(ma)
+    implicit val treeMonad: Monad[Tree] = new Monad[Tree] {
+    
+      def unit[A]: A => Tree[A] =
+        Leaf.apply
+
+      def bind[A, B]: Tree[A] => (A => Tree[B]) => Tree[B] =
+        fa => f => fa match {
+          case Branch(l, r) => Branch(bind(l)(f), bind(r)(f))
+          case Leaf(a)      => f(a)
+        }
     }
   }
 }
