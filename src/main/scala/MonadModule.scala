@@ -87,6 +87,15 @@ object MonadModule {
         ma => f => ma flatMap f
     }
 
+    implicit val eitherMonad: Monad[Either[String, ?]] = new Monad[Either[String, ?]] {
+    
+      def unit[A]: A => Either[String, A] =
+        Right(_)
+
+      def bind[A, B]: Either[String, A] => (A => Either[String, B]) => Either[String, B] =
+        fa => f => fa flatMap f
+    }
+
     implicit val treeMonad: Monad[Tree] = new Monad[Tree] {
     
       def unit[A]: A => Tree[A] =

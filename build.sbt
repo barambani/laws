@@ -1,6 +1,8 @@
+import Dependencies._
+
 inThisBuild(Seq(
   scalaOrganization := "org.typelevel",
-  scalaVersion := "2.12.4-bin-typelevel-4"
+  scalaVersion      := "2.12.4-bin-typelevel-4"
 ))
 
 lazy val prjcSettings = Seq (
@@ -71,11 +73,11 @@ scalacOptions in (Compile, console) --= Seq (
   "-Xfatal-warnings"
 )
 
-libraryDependencies ++= Seq(
-  "com.chuusai" %% "shapeless" % "2.3.2",
-  "org.scalacheck" %% "scalacheck" % "1.13.5" % "test"
-)
+libraryDependencies ++= externalDependencies
 
 scalacOptions in Test ++= Seq("-Yrangepos")
+
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")
 
 logLevel := Level.Info

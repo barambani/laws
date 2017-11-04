@@ -50,5 +50,6 @@ sealed abstract class MonadLawsCheck[M[_]](name: String)(
 object IdMonadLawsCheck extends MonadLawsCheck[Id]("Id")
 object ListMonadLawsCheck extends MonadLawsCheck[List]("List")
 object OptionMonadLawsCheck extends MonadLawsCheck[Option]("Option")
+object EitherMonadLawsCheck extends MonadLawsCheck[Either[String, ?]]("Either")
 object SequenceMonadLawsCheck extends MonadLawsCheck[Seq]("Sequence")
 object TreeMonadLawsCheck extends MonadLawsCheck[Tree]("Tree")
