@@ -1,7 +1,7 @@
 import scala.language.higherKinds
 
 import Algebra.{Tree, Branch, Leaf}
-import Algebra.FuncFromIntTo
+import Algebra.Func
 import Algebra.Id
 
 object FunctorModule {
@@ -15,7 +15,7 @@ object FunctorModule {
   }
 
   object Functor {
-    def apply[F[_]](implicit INST: Functor[F]): Functor[F] = INST
+    def apply[F[_]](implicit F: Functor[F]): Functor[F] = F
   }
 
   implicit final class FunctorSyntax[F[_]: Functor, A](fa: F[A]) {
@@ -58,10 +58,10 @@ object FunctorModule {
           fa => f => fa map f
       }
 
-    implicit val functionFromIntFunctor: Functor[FuncFromIntTo] =
-      new Functor[FuncFromIntTo] {
-        def map[A, B]: FuncFromIntTo[A] => (A => B) => FuncFromIntTo[B] =
-          fa => f => FuncFromIntTo[B](f compose fa.apply)
+    implicit def functionFunctor[X]: Functor[Func[X, ?]] =
+      new Functor[Func[X, ?]] {
+        def map[A, B]: Func[X, A] => (A => B) => Func[X, B] =
+          fa => f => Func[X, B](f compose fa.apply)
       }
 
     implicit val treeFunctor: Functor[Tree] =

@@ -13,7 +13,7 @@ object ContravariantModule {
   }
 
   object Contravariant {
-    def apply[F[_]](implicit INST: Contravariant[F]): Contravariant[F] = INST
+    def apply[F[_]](implicit F: Contravariant[F]): Contravariant[F] = F
   }
 
   implicit final class ContravariantSyntax[F[_]: Contravariant, B](fb: F[B]) {

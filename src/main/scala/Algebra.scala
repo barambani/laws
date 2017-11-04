@@ -2,14 +2,11 @@ object Algebra {
 
   type Id[A] = A
 
-  final case class FuncFromIntTo[+R](private val f: Int => R) extends Function1[Int, R] {
-    override def apply(i: Int): R = f(i)
+  final case class Func[A, +R](private val f: A => R) extends Function1[A, R] {
+    override def apply(a: A): R = f(a)
     override def equals(other: Any): Boolean = 
       other match {
-        case o: FuncFromIntTo[R] =>
-          this.f(0) == o.f(0) &&
-          this.f(Int.MaxValue) == o.f(Int.MaxValue) &&
-          this.f(Int.MinValue) == o.f(Int.MinValue)
+        case _: Func[A, R] => true
         case _ => false
       }
   }

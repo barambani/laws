@@ -13,7 +13,7 @@ object InvariantModule {
   }
 
   object Invariant {
-    def apply[F[_]](implicit INST: Invariant[F]): Invariant[F] = INST
+    def apply[F[_]](implicit F: Invariant[F]): Invariant[F] = F
   }
 
   implicit final class InvariantSyntax[F[_]: Invariant, A](fa: F[A]) {

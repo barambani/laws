@@ -4,7 +4,7 @@ import org.scalacheck.Gen
 
 import shapeless.Lazy
 
-import Algebra.FuncFromIntTo
+import Algebra.Func
 import Algebra.{Tree, Branch, Leaf}
 import Algebra.Show
 import Algebra.Box
@@ -15,11 +15,15 @@ import ContravariantModule.ContravariantSyntax
 
 object ArbitraryImplicits {
 
-  implicit def funcFromIntToArb[A](
+  implicit def funcToArb[X, R](
     implicit 
-      AR: Arbitrary[A]): Arbitrary[FuncFromIntTo[A]] =
+      AX: Arbitrary[X],
+      AR: Arbitrary[R]): Arbitrary[Func[X, R]] =
     Arbitrary {
-      AR.arbitrary map { a => FuncFromIntTo(_ => a) }
+      for {
+        x <- AX.arbitrary
+        r <- AR.arbitrary
+      } yield Func(x => r)
     }
 
   implicit def treeChooser: Arbitrary[Boolean] =

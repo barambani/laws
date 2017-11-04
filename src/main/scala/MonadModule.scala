@@ -14,7 +14,7 @@ object MonadModule {
   }
 
   object Monad {
-    def apply[M[_]](implicit MON: Monad[M]): Monad[M] = MON
+    def apply[M[_]](implicit M: Monad[M]): Monad[M] = M
   }
 
   implicit final class MonadSyntax[M[_]: Monad, A](ma: M[A]) {

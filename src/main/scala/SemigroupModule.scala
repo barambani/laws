@@ -6,7 +6,7 @@ object SemigroupModule {
 
   object Semigroup {
     
-    def apply[A](implicit INST: Semigroup[A]): Semigroup[A] = INST
+    def apply[A](implicit F: Semigroup[A]): Semigroup[A] = F
     
     def newInstance[A]: ((A, A) => A) => Semigroup[A] = 
       f => new Semigroup[A] {
@@ -14,8 +14,9 @@ object SemigroupModule {
       }  
   }
 
-  implicit final class SemigroupSyntax[A](a: A) {
-    def |+|(a1: A)(implicit SA: Semigroup[A]): A = SA.combine(a, a1)
+  implicit final class SemigroupSyntax[A: Semigroup](a: A) {
+    def |+|(a1: A): A = 
+      Semigroup[A].combine(a, a1)
   }
 
   trait Laws {

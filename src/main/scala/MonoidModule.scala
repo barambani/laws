@@ -10,7 +10,7 @@ object MonoidModule {
 
   object Monoid {
     
-    def apply[A](implicit INST: Monoid[A]): Monoid[A] = INST
+    def apply[A](implicit F: Monoid[A]): Monoid[A] = F
 
     def newInstance[A](z: A, SA: Semigroup[A]): Monoid[A] =
       new Monoid[A] {

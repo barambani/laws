@@ -5,7 +5,7 @@ import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 import Algebra.Tree
-import Algebra.FuncFromIntTo
+import Algebra.Func
 import Algebra.Id
 import FunctorModule.Functor
 import FunctorModule.Laws
@@ -43,5 +43,6 @@ object IdFunctorLawsCheck extends FunctorLawsCheck[Id]("Id")
 object SequenceFunctorLawsCheck extends FunctorLawsCheck[Seq]("Sequence")
 object ListFunctorLawsCheck extends FunctorLawsCheck[List]("List")
 object OptionFunctorLawsCheck extends FunctorLawsCheck[Option]("Option")
-object FunctionFromIntFunctorLawsCheck extends FunctorLawsCheck[FuncFromIntTo]("Function From Int")
+object IntFunctionFunctorLawsCheck extends FunctorLawsCheck[Func[Int, ?]]("Function From Int")
+object StringFunctionFunctorLawsCheck extends FunctorLawsCheck[Func[String, ?]]("Function From String")
 object TreeFunctorLawsCheck extends FunctorLawsCheck[Tree]("Tree")
