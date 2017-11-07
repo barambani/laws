@@ -34,11 +34,11 @@ object FunctorModule {
 
   trait LawsNoInfix {
   
-    def mapPreservesIdentity[F[_], A](implicit FF: Functor[F]): F[A] => Boolean =
-      fa => FF.map(fa)(identity[A]) == fa
+    def mapPreservesIdentity[F[_]: Functor, A]: F[A] => Boolean =
+      fa => Functor[F].map(fa)(identity[A]) == fa
 
-    def mapPreservesComposition[F[_], A, B, C](implicit FF: Functor[F]): F[A] => (A => B) => (B => C) => Boolean =
-      fa => f => g => FF.map(fa)(g compose f) == FF.map(FF.map(fa)(f))(g)
+    def mapPreservesComposition[F[_]: Functor, A, B, C]: F[A] => (A => B) => (B => C) => Boolean =
+      fa => f => g => Functor[F].map(fa)(g compose f) == Functor[F].map(Functor[F].map(fa)(f))(g)
   }
 
   object Laws extends Laws

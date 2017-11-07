@@ -20,15 +20,15 @@ object MonoidModule {
   }
 
   sealed trait Laws extends SemigroupModule.Laws {
-    def zeroIdentity[A](a: A)(implicit MA: Monoid[A]): Boolean =
-      (a |+| MA.zero) == a && 
-      (MA.zero |+| a) == a
+    def zeroIdentity[A: Monoid](a: A): Boolean =
+      (a |+| Monoid[A].zero) == a && 
+      (Monoid[A].zero |+| a) == a
   }
 
   sealed trait LawsNoInfix extends SemigroupModule.LawsNoInfix {
-    def zeroIdentity[A](a: A)(implicit MA: Monoid[A]): Boolean =
-      MA.combine(a, MA.zero) == a && 
-      MA.combine(MA.zero, a) == a
+    def zeroIdentity[A: Monoid](a: A): Boolean =
+      Monoid[A].combine(a, Monoid[A].zero) == a && 
+      Monoid[A].combine(Monoid[A].zero, a) == a
   }
 
   object Laws extends Laws

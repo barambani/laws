@@ -31,11 +31,12 @@ object ArbitraryImplicits {
 
   implicit def branchArb[A](
     implicit 
-      TRAR: Lazy[Arbitrary[Tree[A]]]): Arbitrary[Branch[A]] =
+      LEFT : Lazy[Arbitrary[Tree[A]]],
+      RIGHT: Lazy[Arbitrary[Tree[A]]]): Arbitrary[Branch[A]] =
     Arbitrary {
       for {
-        l <- TRAR.value.arbitrary
-        r <- TRAR.value.arbitrary
+        l <- LEFT.value.arbitrary
+        r <- RIGHT.value.arbitrary
       } yield Branch(l, r)
     }
 
