@@ -21,28 +21,39 @@ object ContravariantModule {
       f => Contravariant[F].contramap(fb)(f)
   }
 
-  sealed trait Laws {
+  sealed trait ContravariantLaws[F[_]] {
+
+    implicit def F: Contravariant[F]
   
-    def contramapPreservesIdentity[F[_]: Contravariant, A]: F[A] => Boolean =
+    def contramapPreservesIdentity[A]: F[A] => Boolean =
       fa => (fa contramap identity[A]) == fa
 
-    def contramapPreservesComposition[F[_]: Contravariant, A, B, C]: F[C] => (A => B) => (B => C) => Boolean =
+    def contramapPreservesComposition[A, B, C]: F[C] => (A => B) => (B => C) => Boolean =
       fc => f => g => (fc contramap (g compose f)) == (fc contramap g contramap f)
   }
 
-  sealed trait LawsNoInfix {
-    
-    def contramapPreservesIdentity[F[_], A](implicit CF: Contravariant[F]): F[A] => Boolean =
-      fa => CF.contramap(fa)(identity[A]) == fa
+  sealed trait ContravariantLawsNoInfix[F[_]] {
 
-    def contramapPreservesComposition[F[_], A, B, C](implicit CF: Contravariant[F]): F[C] => (A => B) => (B => C) => Boolean =
-      fc => f => g => CF.contramap(fc)(g compose f) == CF.contramap(CF.contramap(fc)(g))(f)
+    implicit def F: Contravariant[F]
+    
+    def contramapPreservesIdentity[A]: F[A] => Boolean =
+      fa => F.contramap(fa)(identity[A]) == fa
+
+    def contramapPreservesComposition[A, B, C]: F[C] => (A => B) => (B => C) => Boolean =
+      fc => f => g => F.contramap(fc)(g compose f) == F.contramap(F.contramap(fc)(g))(f)
   }
 
-  object Laws extends Laws
-  object LawsNoInfix extends LawsNoInfix
+  object ContravariantLaws {
+    def apply[F[_]](implicit FI: Contravariant[F]): ContravariantLaws[F] =
+      new ContravariantLaws[F] { def F = FI }
+  }
+  
+  object ContravariantLawsNoInfix {
+    def apply[F[_]](implicit FI: Contravariant[F]): ContravariantLawsNoInfix[F] =
+      new ContravariantLawsNoInfix[F] { def F = FI }
+  }
 
-  object Instances {
+  object ContravariantInstances {
   
     implicit val showContravariant: Contravariant[Show] = 
       new Contravariant[Show] {
