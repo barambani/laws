@@ -8,41 +8,43 @@ import Algebra.Tree
 import Algebra.Func
 import Algebra.Id
 import FunctorModule.Functor
-import FunctorModule.Laws
-import FunctorModule.LawsNoInfix
+import FunctorModule.FunctorLaws
+import FunctorModule.FunctorLawsNoInfix
 import FunctorModule.FunctorInstances._
 import ArbitraryImplicits._
 
-abstract class FunctorLawsCheck[F[_]](name: String)(
+abstract class FunctorLawsCheck[F[_] : Functor](name: String)(
   implicit
-    FU: Functor[F],
     AFI: Arbitrary[F[Int]],
     AFS: Arbitrary[F[String]]
 ) extends Properties(s"$name Functor Laws Check") {
 
+  val laws        = FunctorLaws[F]
+  val lawsNoInfix = FunctorLawsNoInfix[F]
+
   property(" Functor's Map Preserves Identity") = forAll {
-    (fa: F[Int]) => Laws.mapPreservesIdentity(FU)(fa)
+    (fa: F[Int]) => laws.fmapPreservesIdentity(fa)
   }
 
   property(" Functor's Map Preserves Composition") = forAll {
     (fa: F[Int], f: Int => String, g: String => Boolean) => 
-      Laws.mapPreservesComposition(FU)(fa)(f)(g)
+      laws.fmapPreservesComposition(fa)(f)(g)
   }
 
   property(" Functor's Map Preserves Identity No Infix") = forAll {
-    (fa: F[String]) => LawsNoInfix.mapPreservesIdentity(FU)(fa)
+    (fa: F[String]) => lawsNoInfix.fmapPreservesIdentity(fa)
   }
 
   property(" Functor's Map Preserves Composition No Infix") = forAll {
     (fa: F[String], f: String => Int, g: Int => Boolean) => 
-      LawsNoInfix.mapPreservesComposition(FU)(fa)(f)(g)
+      lawsNoInfix.fmapPreservesComposition(fa)(f)(g)
   }
 }
 
-object IdFunctorLawsCheck extends FunctorLawsCheck[Id]("Id")
-object SequenceFunctorLawsCheck extends FunctorLawsCheck[Seq]("Sequence")
-object ListFunctorLawsCheck extends FunctorLawsCheck[List]("List")
-object OptionFunctorLawsCheck extends FunctorLawsCheck[Option]("Option")
-object IntFunctionFunctorLawsCheck extends FunctorLawsCheck[Func[Int, ?]]("Function From Int")
+object IdFunctorLawsCheck             extends FunctorLawsCheck[Id]("Id")
+object SequenceFunctorLawsCheck       extends FunctorLawsCheck[Seq]("Sequence")
+object ListFunctorLawsCheck           extends FunctorLawsCheck[List]("List")
+object OptionFunctorLawsCheck         extends FunctorLawsCheck[Option]("Option")
+object IntFunctionFunctorLawsCheck    extends FunctorLawsCheck[Func[Int, ?]]("Function From Int")
 object StringFunctionFunctorLawsCheck extends FunctorLawsCheck[Func[String, ?]]("Function From String")
-object TreeFunctorLawsCheck extends FunctorLawsCheck[Tree]("Tree")
+object TreeFunctorLawsCheck           extends FunctorLawsCheck[Tree]("Tree")

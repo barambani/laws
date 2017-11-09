@@ -8,48 +8,50 @@ import Algebra.Id
 import Algebra.Tree
 import MonadModule.MonadInstances._
 import MonadModule.Monad
-import MonadModule.Laws
-import MonadModule.LawsNoInfix
+import MonadModule.MonadLaws
+import MonadModule.MonadLawsNoInfix
 import ArbitraryImplicits._
 
-sealed abstract class MonadLawsCheck[M[_]](name: String)(
+sealed abstract class MonadLawsCheck[F[_] : Monad](name: String)(
   implicit 
-    MO: Monad[M],
-    AMI: Arbitrary[M[Int]],
-    AMS: Arbitrary[M[String]],
-    AMB: Arbitrary[M[Boolean]]
+    AMI: Arbitrary[F[Int]],
+    AMS: Arbitrary[F[String]],
+    AMB: Arbitrary[F[Boolean]]
 ) extends Properties(s"$name Monad Laws Check") {
 
+  val laws        = MonadLaws[F]
+  val lawsNoInfix = MonadLawsNoInfix[F]
+
   property(" Left identity") = forAll {
-    (a: Int, f: Int => M[Int]) => Laws.leftIdentity(MO)(a)(f)
+    (a: Int, f: Int => F[Int]) => laws.leftIdentity(a)(f)
   }
 
   property(" Right identity") = forAll {
-    (ma: M[Int]) => Laws.rightIdentity(MO)(ma)
+    (ma: F[Int]) => laws.rightIdentity(ma)
   }
 
   property(" Associativity") = forAll {
-    (ma: M[Int], f: Int => M[String], g: String => M[Boolean]) => 
-      Laws.associativity(MO)(ma)(f)(g)
+    (ma: F[Int], f: Int => F[String], g: String => F[Boolean]) => 
+      laws.associativity(ma)(f)(g)
   }
 
   property(" Left identity No Infix") = forAll {
-    (a: Int, f: Int => M[Int]) => LawsNoInfix.leftIdentity(MO)(a)(f)
+    (a: Int, f: Int => F[Int]) => lawsNoInfix.leftIdentity(a)(f)
   }
 
   property(" Right identity No Infix") = forAll {
-    (ma: M[Int]) => LawsNoInfix.rightIdentity(MO)(ma)
+    (ma: F[Int]) => lawsNoInfix.rightIdentity(ma)
   }
 
   property(" Associativity No Infix") = forAll {
-    (ma: M[Int], f: Int => M[String], g: String => M[Boolean]) => 
-      LawsNoInfix.associativity(MO)(ma)(f)(g)
+    (ma: F[Int], f: Int => F[String], g: String => F[Boolean]) => 
+      lawsNoInfix.associativity(ma)(f)(g)
   }
 }
 
-object IdMonadLawsCheck extends MonadLawsCheck[Id]("Id")
-object ListMonadLawsCheck extends MonadLawsCheck[List]("List")
-object OptionMonadLawsCheck extends MonadLawsCheck[Option]("Option")
-object EitherMonadLawsCheck extends MonadLawsCheck[Either[String, ?]]("Either")
+object IdMonadLawsCheck       extends MonadLawsCheck[Id]("Id")
+object ListMonadLawsCheck     extends MonadLawsCheck[List]("List")
+object OptionMonadLawsCheck   extends MonadLawsCheck[Option]("Option")
+object EitherMonadLawsCheck   extends MonadLawsCheck[Either[String, ?]]("Either")
 object SequenceMonadLawsCheck extends MonadLawsCheck[Seq]("Sequence")
-object TreeMonadLawsCheck extends MonadLawsCheck[Tree]("Tree")
+object TreeMonadLawsCheck     extends MonadLawsCheck[Tree]("Tree")
