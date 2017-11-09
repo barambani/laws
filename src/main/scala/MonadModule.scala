@@ -1,9 +1,9 @@
-import scala.language.higherKinds
-
 import Algebra.Id
 import Algebra.{Tree, Leaf, Branch}
 import FunctorModule.Functor
 import ApplicativeModule.Applicative
+
+import scala.language.higherKinds
 
 object MonadModule {
 

@@ -3,33 +3,35 @@ import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 import MonoidModule.Monoid
-import MonoidModule.Laws
-import MonoidModule.LawsNoInfix
+import MonoidModule.MonoidLaws
+import MonoidModule.MonoidLawsNoInfix
 import MonoidModule.MonoidInstances._
 
-sealed abstract class MonoidLawsCheck[A](name: String)(
+sealed abstract class MonoidLawsCheck[A : Monoid](name: String)(
   implicit
-    MA: Monoid[A],
     AA: Arbitrary[A]
 ) extends Properties(s"$name Monoid Laws Check") {
 
+  val laws        = MonoidLaws[A]
+  val lawsNoInfix = MonoidLawsNoInfix[A]
+
   property(" Zero Identity") = forAll {
-    (a: A) => Laws.zeroIdentity(a)
+    (a: A) => laws.zeroIdentity(a)
   }
 
   property(" Combine Associativity") = forAll {
-    (a1: A, a2: A, a3: A) => Laws.combineAssociativity(a1, a2, a3)
+    (a1: A, a2: A, a3: A) => laws.combineAssociativity(a1, a2, a3)
   }
 
   property(" Zero Identity No Infix") = forAll {
-    (a: A) => LawsNoInfix.zeroIdentity(a)
+    (a: A) => lawsNoInfix.zeroIdentity(a)
   }
 
   property(" Combine Associativity No Infix") = forAll {
-    (a1: A, a2: A, a3: A) => LawsNoInfix.combineAssociativity(a1, a2, a3)
+    (a1: A, a2: A, a3: A) => lawsNoInfix.combineAssociativity(a1, a2, a3)
   }
 }
 
-object IntWithAddMonoidLawsCheck extends MonoidLawsCheck[Int]("Int With Addition")
-object StringWithConcatMonoidLawsCheck extends MonoidLawsCheck[String]("String With Concatenation")
+object IntWithAddMonoidLawsCheck          extends MonoidLawsCheck[Int]("Int With Addition")
+object StringWithConcatMonoidLawsCheck    extends MonoidLawsCheck[String]("String With Concatenation")
 object ListOfIntWithConcatMonoidLawsCheck extends MonoidLawsCheck[List[Int]]("List Of Int With Concatenation")

@@ -21,30 +21,41 @@ object InvariantModule {
       f => g => Invariant[F].imap(fa)(f)(g)
   }
 
-  sealed trait Laws {
+  sealed trait InvariantLaws[F[_]] {
 
-    def imapPreservesIdentity[F[_]: Invariant, A]: F[A] => Boolean =
+    implicit def F: Invariant[F]
+
+    def imapPreservesIdentity[A]: F[A] => Boolean =
       fa => fa.imap(identity[A])(identity[A]) == fa
 
-    def imapPreservesComposition[F[_]: Invariant, A, B, C]: F[A] => (A => B) => (B => A) => (B => C) => (C => B) => Boolean =
+    def imapPreservesComposition[A, B, C]: F[A] => (A => B) => (B => A) => (B => C) => (C => B) => Boolean =
       fa => f => f1 => g => g1 => 
         fa.imap(g compose f)(f1 compose g1) == fa.imap(f)(f1).imap(g)(g1)
   }
 
-  sealed trait LawsNoInfix {
-  
-    def imapPreservesIdentity[F[_], A](implicit IV: Invariant[F]): F[A] => Boolean =
-      fa => IV.imap(fa)(identity[A])(identity[A]) == fa
+  sealed trait InvariantLawsNoInfix[F[_]] {
 
-    def imapPreservesComposition[F[_], A, B, C](implicit IV: Invariant[F]): F[A] => (A => B) => (B => A) => (B => C) => (C => B) => Boolean =
+    implicit def F: Invariant[F]
+  
+    def imapPreservesIdentity[A]: F[A] => Boolean =
+      fa => F.imap(fa)(identity[A])(identity[A]) == fa
+
+    def imapPreservesComposition[A, B, C]: F[A] => (A => B) => (B => A) => (B => C) => (C => B) => Boolean =
       fa => f => f1 => g => g1 => 
-        IV.imap(fa)(g compose f)(f1 compose g1) == IV.imap(IV.imap(fa)(f)(f1))(g)(g1)
+        F.imap(fa)(g compose f)(f1 compose g1) == F.imap(F.imap(fa)(f)(f1))(g)(g1)
   }
 
-  object Laws extends Laws
-  object LawsNoInfix extends LawsNoInfix
+  object InvariantLaws {
+    def apply[F[_]](implicit FI: Invariant[F]): InvariantLaws[F] =
+      new InvariantLaws[F] { def F = FI }
+  }
+  
+  object InvariantLawsNoInfix {
+    def apply[F[_]](implicit FI: Invariant[F]): InvariantLawsNoInfix[F] =
+      new InvariantLawsNoInfix[F] { def F = FI }
+  }
 
-  object Instances {
+  object InvariantInstances {
   
     implicit val codecInvarian: Invariant[Codec] = 
       new Invariant[Codec] {

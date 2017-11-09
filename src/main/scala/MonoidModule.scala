@@ -1,4 +1,6 @@
 import SemigroupModule.Semigroup
+import SemigroupModule.SemigroupLaws
+import SemigroupModule.SemigroupLawsNoInfix
 import SemigroupModule.SemigroupSyntax
 import SemigroupModule.SemigroupInstances._
 
@@ -19,20 +21,31 @@ object MonoidModule {
       }
   }
 
-  sealed trait Laws extends SemigroupModule.Laws {
-    def zeroIdentity[A: Monoid](a: A): Boolean =
-      (a |+| Monoid[A].zero) == a && 
-      (Monoid[A].zero |+| a) == a
+  sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
+
+    implicit def F: Monoid[A]
+
+    def zeroIdentity(a: A): Boolean =
+      (a |+| F.zero) == a && (F.zero |+| a) == a
   }
 
-  sealed trait LawsNoInfix extends SemigroupModule.LawsNoInfix {
-    def zeroIdentity[A: Monoid](a: A): Boolean =
-      Monoid[A].combine(a, Monoid[A].zero) == a && 
-      Monoid[A].combine(Monoid[A].zero, a) == a
+  sealed trait MonoidLawsNoInfix[A] extends SemigroupLawsNoInfix[A] {
+
+    implicit def F: Monoid[A]
+
+    def zeroIdentity(a: A): Boolean =
+      F.combine(a, F.zero) == a && F.combine(F.zero, a) == a
   }
 
-  object Laws extends Laws
-  object LawsNoInfix extends LawsNoInfix
+  object MonoidLaws {
+    def apply[A](implicit FI: Monoid[A]): MonoidLaws[A] =
+      new MonoidLaws[A] { def F = FI }
+  }
+
+  object MonoidLawsNoInfix {
+    def apply[A](implicit FI: Monoid[A]): MonoidLawsNoInfix[A] =
+      new MonoidLawsNoInfix[A] { def F = FI }
+  }
 
   object MonoidInstances {
     

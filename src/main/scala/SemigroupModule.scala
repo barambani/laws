@@ -19,18 +19,31 @@ object SemigroupModule {
       Semigroup[A].combine(a, a1)
   }
 
-  trait Laws {
-    def combineAssociativity[A: Semigroup](a1: A, a2: A, a3: A): Boolean =
+  trait SemigroupLaws[A] {
+
+    implicit def F: Semigroup[A]
+
+    def combineAssociativity(a1: A, a2: A, a3: A): Boolean =
       ((a1 |+| a2) |+| a3) == (a1 |+| (a2 |+| a3))
   }
 
-  trait LawsNoInfix {
-    def combineAssociativity[A](a1: A, a2: A, a3: A)(implicit SA: Semigroup[A]): Boolean =
-      SA.combine(SA.combine(a1, a2), a3) == SA.combine(a1, SA.combine(a2, a3))
+  trait SemigroupLawsNoInfix[A] {
+
+    implicit def F: Semigroup[A]
+
+    def combineAssociativity(a1: A, a2: A, a3: A): Boolean =
+      F.combine(F.combine(a1, a2), a3) == F.combine(a1, F.combine(a2, a3))
   }
 
-  object Laws extends Laws
-  object LawsNoInfix extends LawsNoInfix
+  object SemigroupLaws {
+    def apply[A](implicit FI: Semigroup[A]): SemigroupLaws[A] =
+      new SemigroupLaws[A] { def F = FI }
+  }
+  
+  object SemigroupLawsNoInfix {
+    def apply[A](implicit FI: Semigroup[A]): SemigroupLawsNoInfix[A] =
+      new SemigroupLawsNoInfix[A] { def F = FI }
+  }
 
   object SemigroupInstances {
     
