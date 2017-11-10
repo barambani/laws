@@ -25,9 +25,9 @@ object MonadModule {
     def apply[F[_]](implicit F: Monad[F]): Monad[F] = F
   }
 
-  implicit final class MonadSyntax[F[_]: Monad, A](ma: F[A]) {
+  implicit final class MonadSyntax[F[_] : Monad, A](fa: F[A]) {
     def >>=[B](f: A => F[B]): F[B] = 
-      Monad[F].bind(ma) { f } 
+      Monad[F].bind(fa) { f } 
   }
 
   sealed trait MonadLaws[F[_]] {

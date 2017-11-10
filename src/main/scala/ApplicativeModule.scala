@@ -18,4 +18,27 @@ object ApplicativeModule {
     def fmap[A, B]: F[A] => (A => B) => F[B] =
       fa => f => ap(fa)(pure(f))
   }
+
+  object Applicative {
+    def apply[F[_]](implicit F: Applicative[F]): Applicative[F] = F
+  }
+
+  implicit final class ApplicativeSyntax[F[_] : Applicative, A](fa: F[A]) {
+    def ap[B](ff: F[A => B]): F[B] =
+      Applicative[F].ap(fa)(ff)
+  }
+
+  sealed trait ApplicativeLaws[F[_]] {
+    
+    implicit def F: Applicative[F]
+
+
+  }
+
+  sealed trait ApplicativeLawsNoInfix[F[_]] {
+  
+    implicit def F: Applicative[F]
+
+
+  }
 }
