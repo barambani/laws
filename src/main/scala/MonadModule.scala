@@ -79,15 +79,6 @@ object MonadModule {
         ma => f => f(ma)
     }
     
-    implicit val seqMonad: Monad[Seq] = new Monad[Seq] {
-      
-      def `return`[A]: A => Seq[A] = 
-        _ :: Nil
-      
-      def bind[A, B]: Seq[A] => (A => Seq[B]) => Seq[B] =
-        ma => f => ma flatMap f
-    }
-    
     implicit val listMonad: Monad[List] = new Monad[List] {
       
       def `return`[A]: A => List[A] = 
@@ -106,12 +97,12 @@ object MonadModule {
         ma => f => ma flatMap f
     }
 
-    implicit val eitherMonad: Monad[Either[String, ?]] = new Monad[Either[String, ?]] {
+    implicit def eitherMonad[E]: Monad[Either[E, ?]] = new Monad[Either[E, ?]] {
     
-      def `return`[A]: A => Either[String, A] =
+      def `return`[A]: A => Either[E, A] =
         Right(_)
 
-      def bind[A, B]: Either[String, A] => (A => Either[String, B]) => Either[String, B] =
+      def bind[A, B]: Either[E, A] => (A => Either[E, B]) => Either[E, B] =
         fa => f => fa flatMap f
     }
 

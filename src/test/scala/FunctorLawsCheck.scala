@@ -42,9 +42,9 @@ abstract class FunctorLawsCheck[F[_] : Functor](name: String)(
 }
 
 object IdFunctorLawsCheck             extends FunctorLawsCheck[Id]("Id")
-object SequenceFunctorLawsCheck       extends FunctorLawsCheck[Seq]("Sequence")
 object ListFunctorLawsCheck           extends FunctorLawsCheck[List]("List")
 object OptionFunctorLawsCheck         extends FunctorLawsCheck[Option]("Option")
+object EitherFunctorLawsCheck         extends FunctorLawsCheck[Either[String, ?]]("Either")
 object IntFunctionFunctorLawsCheck    extends FunctorLawsCheck[Func[Int, ?]]("Function From Int")
 object StringFunctionFunctorLawsCheck extends FunctorLawsCheck[Func[String, ?]]("Function From String")
 object TreeFunctorLawsCheck           extends FunctorLawsCheck[Tree]("Tree")

@@ -56,15 +56,21 @@ object FunctorModule {
 
   object FunctorInstances {
 
-    implicit val seqFunctor: Functor[Seq] = 
-      new Functor[Seq] {
-        def fmap[A, B]: Seq[A] => (A => B) => Seq[B] =
+    implicit val listFunctor: Functor[List] =
+      new Functor[List] {
+        def fmap[A, B]: List[A] => (A => B) => List[B] =
           fa => f => fa map f
       }
 
     implicit val optionFunctor: Functor[Option] =
       new Functor[Option] {
         def fmap[A, B]: Option[A] => (A => B) => Option[B] =
+          fa => f => fa map f
+      }
+
+    implicit def eitherFunctor[E]: Functor[Either[E, ?]] =
+      new Functor[Either[E, ?]] {
+        def fmap[A, B]: Either[E, A] => (A => B) => Either[E, B] =
           fa => f => fa map f
       }
 
@@ -87,12 +93,6 @@ object FunctorModule {
       new Functor[Id] {
         def fmap[A, B]: Id[A] => (A => B) => Id[B] =
           fa => f => f(fa)
-      }
-
-    implicit val listFunctor: Functor[List] =
-      new Functor[List] {
-        def fmap[A, B]: List[A] => (A => B) => List[B] =
-          fa => f => fa map f
       }
   }
 }
