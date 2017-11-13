@@ -55,5 +55,8 @@ object SemigroupModule {
 
     implicit val listOfIntWithAppendS: Semigroup[List[Int]] =
       Semigroup.newInstance[List[Int]](_ ++ _)
+
+    implicit val listOfStringWithConcatS: Semigroup[List[String]] =
+      Semigroup.newInstance[List[String]](_ ++ _)
   }
 }

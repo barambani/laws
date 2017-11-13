@@ -32,13 +32,14 @@ object Algebra {
         def show: A => String = f
       }
 
-    implicit lazy val showInt: Show[Int] = new Show[Int] {
-      def show: Int => String = _.toString
-    }
+    implicit val showInt: Show[Int] = 
+      newInstance[Int](_.toString)
 
-    implicit lazy val showBoolean: Show[Boolean] = new Show[Boolean] {
-      def show: Boolean => String = _.toString
-    }
+    implicit val showBoolean: Show[Boolean] =
+      newInstance[Boolean](_.toString)
+
+    implicit def showOfBox[A]: Show[Box[A]] = 
+      newInstance[Box[A]](_.value.toString)
   }
 
   final case class Box[A](value: A)

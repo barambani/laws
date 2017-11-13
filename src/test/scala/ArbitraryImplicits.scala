@@ -10,8 +10,6 @@ import Algebra.Show
 import Algebra.Box
 import Algebra.Symbol
 import Algebra.Codec
-import ContravariantModule.Contravariant
-import ContravariantModule.ContravariantSyntax
 
 object ArbitraryImplicits {
 
@@ -58,24 +56,30 @@ object ArbitraryImplicits {
       } 
     }
 
+  implicit def boxArb[A](
+    implicit
+      AA: Arbitrary[A]): Arbitrary[Box[A]] =
+    Arbitrary {
+      AA.arbitrary map (Box(_))
+    }
+
   implicit def showArb[A](
     implicit 
       SH: Show[A]): Arbitrary[Show[A]] =
     Arbitrary(SH)
 
-  implicit def boxArb[A](
+  implicit def aToBox[A, B](
     implicit
-      AS: Arbitrary[Show[A]],
-      CA: Contravariant[Show]): Arbitrary[Show[Box[A]]] =
-    Arbitrary {
-      AS.arbitrary map { sa => sa contramap (_.value) }
-    }
-
-  implicit def aToBox[A](
-    implicit
-      AB: Arbitrary[Boolean]): Arbitrary[A => Box[Boolean]] =
+      AB: Arbitrary[B]): Arbitrary[A => Box[B]] =
     Arbitrary {
       AB.arbitrary map { b => (a: A) => Box(b) }
+    }
+
+  implicit def treeTo[A, B](
+    implicit
+      AB: Arbitrary[B]): Arbitrary[Tree[A] => B] =
+    Arbitrary {
+      AB.arbitrary map { b => (t: Tree[A]) => b }
     }
 
   implicit def symbol(implicit AS: Arbitrary[String]): Arbitrary[Symbol] =
@@ -87,7 +91,7 @@ object ArbitraryImplicits {
     Arbitrary(CS)
 
   implicit def symbolCogen: Cogen[Symbol] =
-    Cogen[Symbol]((s: Symbol) => s.name.size.toLong)
+    Cogen[String] contramap (_.name)
 
   implicit def symbolToInt(
     implicit
