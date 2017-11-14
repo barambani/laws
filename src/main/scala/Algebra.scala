@@ -2,17 +2,18 @@ object Algebra {
 
   type Id[A] = A
 
-  final case class Func[A, +R](private val f: A => R) extends Function1[A, R] {
-    override def apply(a: A): R = f(a)
-    override def equals(other: Any): Boolean = 
-      other match {
-        case _: Func[A, R] => true
-        case _ => false
-      }
-  }
+  final case class Func[A, +R](private val f: A => R)
+    extends Function1[A, R] {  
+      override def apply(a: A): R = f(a)
+      override def equals(other: Any): Boolean = 
+        other match {
+          case _: Func[A, R] => true
+          case _ => false
+        }
+    }
 
-  sealed trait Tree[+A]
-  final case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+  sealed trait Tree[+A] extends Product with Serializable
+  final case class Branch[A](l: Tree[A], r: Tree[A]) extends Tree[A]
   final case class Leaf[A](v: A) extends Tree[A]
 
   trait Show[A] {
