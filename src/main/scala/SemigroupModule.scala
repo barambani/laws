@@ -15,7 +15,7 @@ object SemigroupModule {
   }
 
   implicit final class SemigroupSyntax[A: Semigroup](a: A) {
-    def |+|(a1: A): A = 
+    def <>(a1: A): A = 
       Semigroup[A].combine(a, a1)
   }
 
@@ -24,7 +24,7 @@ object SemigroupModule {
     implicit def F: Semigroup[A]
 
     def combineAssociativity(a1: A, a2: A, a3: A): Boolean =
-      ((a1 |+| a2) |+| a3) == (a1 |+| (a2 |+| a3))
+      ((a1 <> a2) <> a3) == (a1 <> (a2 <> a3))
   }
 
   trait SemigroupLawsNoInfix[A] {

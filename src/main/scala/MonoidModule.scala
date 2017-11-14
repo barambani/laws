@@ -7,7 +7,7 @@ import SemigroupModule.SemigroupInstances._
 object MonoidModule {
 
   trait Monoid[A] extends Semigroup[A] {
-    def zero: A
+    def empty: A
   }
 
   object Monoid {
@@ -17,7 +17,7 @@ object MonoidModule {
     def newInstance[A](z: A, SA: Semigroup[A]): Monoid[A] =
       new Monoid[A] {
         def combine: (A, A) => A = SA.combine
-        def zero: A = z
+        def empty: A = z
       }
   }
 
@@ -25,16 +25,16 @@ object MonoidModule {
 
     implicit def F: Monoid[A]
 
-    def zeroIdentity(a: A): Boolean =
-      (a |+| F.zero) == a && (F.zero |+| a) == a
+    def emptyIdentity(a: A): Boolean =
+      (a <> F.empty) == a && (F.empty <> a) == a
   }
 
   sealed trait MonoidLawsNoInfix[A] extends SemigroupLawsNoInfix[A] {
 
     implicit def F: Monoid[A]
 
-    def zeroIdentity(a: A): Boolean =
-      F.combine(a, F.zero) == a && F.combine(F.zero, a) == a
+    def emptyIdentity(a: A): Boolean =
+      F.combine(a, F.empty) == a && F.combine(F.empty, a) == a
   }
 
   object MonoidLaws {

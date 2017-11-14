@@ -117,7 +117,7 @@ object ApplicativeModule {
         def ap[A, B]: Either[E, A] => Either[E, A => B] => Either[E, B] =
           fa => ff => (fa, ff) match {
             case (Right(a), Right(f)) => Right(f(a))
-            case (Left(ea), Left(ef)) => Left(ea |+| ef)
+            case (Left(ea), Left(ef)) => Left(ea <> ef)
             case (Left(ea), _)        => Left(ea)
             case (_, Left(ef))        => Left(ef)
           }

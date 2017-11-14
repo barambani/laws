@@ -16,7 +16,7 @@ sealed abstract class MonoidLawsCheck[A : Monoid](name: String)(
   val lawsNoInfix = MonoidLawsNoInfix[A]
 
   property(" Zero Identity") = forAll {
-    (a: A) => laws.zeroIdentity(a)
+    (a: A) => laws.emptyIdentity(a)
   }
 
   property(" Combine Associativity") = forAll {
@@ -24,7 +24,7 @@ sealed abstract class MonoidLawsCheck[A : Monoid](name: String)(
   }
 
   property(" Zero Identity No Infix") = forAll {
-    (a: A) => lawsNoInfix.zeroIdentity(a)
+    (a: A) => lawsNoInfix.emptyIdentity(a)
   }
 
   property(" Combine Associativity No Infix") = forAll {
