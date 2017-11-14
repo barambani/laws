@@ -40,6 +40,9 @@ object Algebra {
 
     implicit def showOfBox[A]: Show[Box[A]] = 
       newInstance[Box[A]](_.value.toString)
+
+    implicit def showOfSymbol: Show[Symbol] =
+      newInstance[Symbol](s => s"symbol ${ s.name }")
   }
 
   final case class Box[A](value: A)

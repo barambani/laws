@@ -68,11 +68,32 @@ object ArbitraryImplicits {
       SH: Show[A]): Arbitrary[Show[A]] =
     Arbitrary(SH)
 
+  implicit def boxToBox[A, B](
+    implicit
+      AB: Arbitrary[Box[B]]): Arbitrary[Box[A] => Box[B]] =
+    Arbitrary {
+      AB.arbitrary map { bb => (_: Box[A]) => bb }
+    }
+
   implicit def aToBox[A, B](
     implicit
       AB: Arbitrary[B]): Arbitrary[A => Box[B]] =
     Arbitrary {
       AB.arbitrary map { b => (a: A) => Box(b) }
+    }
+
+  implicit def boxTo[A, B](
+    implicit
+      AB: Arbitrary[B]): Arbitrary[Box[A] => B] =
+    Arbitrary {
+      AB.arbitrary map { b => (_: Box[A]) => b }
+    }
+
+  implicit def treeToBox[A, B](
+    implicit
+      AB: Arbitrary[Box[B]]): Arbitrary[Tree[A] => Box[B]] =
+    Arbitrary {
+      AB.arbitrary map { b => (t: Tree[A]) => b }
     }
 
   implicit def treeTo[A, B](
