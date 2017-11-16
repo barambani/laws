@@ -28,7 +28,7 @@ and every one has its own **_Scala_** file called **_Module_**. As part of the i
 
 ## Laws
 ### Semigroup
-A semigroup consists of a set (*type for us*) and a binary operation. Here is defined as
+A semigroup consists of a set (*type for us from now on*) and a binary operation ([see this for more](https://en.wikipedia.org/wiki/Semigroup)). Here is defined as
 ```scala
 trait Semigroup[A] {
   def combine: (A, A) => A
@@ -36,6 +36,19 @@ trait Semigroup[A] {
 ```
 and the `combine` operation has to abide by the associativity law as in
 ```scala
-((a1 <> a2) <> a3) == (a1 <> (a2 <> a3))
+(a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
+
 ```
 Notice that the syntax extension allows us to use the notation `<>` for the combine operation.
+
+### Monoid
+A monoid is a specialization of a semigrup that adds to the structure and identity element ([more](https://en.wikipedia.org/wiki/Monoid)). Here is defined as 
+```scala
+trait Monoid[A] extends Semigroup[A] {
+  def empty: A
+}
+```
+and other than the operation associativity it has to respect also the identity law as in
+```scala
+(a: A) => (a <> empty) == a && (empty <> a) == a
+```
