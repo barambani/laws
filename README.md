@@ -18,13 +18,12 @@ The type classes included are
 // (*) No laws implemented
 ```
 and every one has its own **_Scala_** file called **_Module_**. As part of the implementation the following are provided:
-```
-- the type class definition
-- a set of instances
-- a syntax extension
-- a definition of the laws that uses the syntax extension
-- a definition of the laws that strictly uses the type class functions
-```
+
+  * the type class definition
+  * a set of instances
+  * a syntax extension
+  * a definition of the laws that uses the syntax extension
+  * a definition of the laws that strictly uses the type class functions
 
 ## Laws
 ### Semigroup
@@ -52,3 +51,9 @@ and other than the operation associativity it has to respect also the identity l
 ```scala
 (a: A) => (a <> empty) == a && (empty <> a) == a
 ```
+### Covariant Functor (Functor)
+### Contravariant Functor (Contravariant)
+### Invariant Functor (Invariant)
+### Cartesian
+### Applicative Functor (Applicative)
+### Monad
