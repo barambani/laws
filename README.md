@@ -40,7 +40,7 @@ where `combine` has to abide by the associativity law for every `a1`, `a2` and `
 (a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 
 ```
-*Notice that the syntax extension allows us to use the notation `<>` for the `combine` operation. The right hand side of the expression above, in fact, is the actual body of the law definition in the code (see below)*
+*Notice that the syntax extension allows us to use the notation `<>` for the `combine` operation. The right hand side of the expression above, in fact, is the actual body of the law definition in the code itself (see below)*
 ```scala
 trait SemigroupLaws[A] {
 
@@ -76,6 +76,25 @@ sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 [[Reference - Monoid]](https://en.wikipedia.org/wiki/Monoid)
 
 ### Covariant Functor (Functor)
+A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. This means that given a *functor* `fa` it's possible to obtain another *functor* `fb` applying a *function* `f: a -> b` to every element of `fa` without changing the structure of `fa`. This is the first type class of the collection that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (or types of kind `* -> *`) and not for regural types (or types of kind `*`). In scala we represent this as
+```scala
+trait Functor[F[_]] {
+  def map[A, B]: F[A] => (A => B) => F[B]
+    
+  def lift[A, B]: (A => B) => F[A] => F[B] =
+    f => fa => map(fa)(f)
+}
+```
+Notice that looking at the `lift` function (`fmap` in Haskell) we can see another capability that the *functor* provides. It allows, in fact, to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* the function into the context `F[_]`.
+
+Anyway, for an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation must preserve the identity morphism for every `F[A]` in `A` and the composition of morphisms for every `F[A]` in `A` and every `f` from `A` => `B` and `g` from `B` => `C`
+```scala
+(fa: F[A]) => (fa map identity[A]) == fa
+(fa: F[A], f: A => B, g: B => C) => (fa map (g compose f)) == (fa map f map g)
+```
+
+[[Reference - Covariant Functor]](https://en.wikipedia.org/wiki/Functor)
+
 ### Contravariant Functor (Contravariant)
 ### Invariant Functor (Invariant)
 ### Cartesian
