@@ -27,15 +27,15 @@ Each type class lives in its own **_Scala_** file called **_Module_**. The modul
 
 An extra file containing the supporting **_Algebra_** is also given. For further details the best is to [navigate the code itself](https://github.com/barambani/laws/tree/master/src/main/scala).
 
-## Laws
+## Implementation and Laws
 ### Semigroup
-A semigroup consists of a *set* `A` (*type for us from now on*) and a binary operation ([see this for more](https://en.wikipedia.org/wiki/Semigroup))
+A semigroup consists of a *set* `A` (*type for us from now on*) and a binary operation (*combine*)
 ```scala
 trait Semigroup[A] {
   def combine: (A, A) => A
 }
 ```
-and the `combine` operation has to abide by the associativity law as in
+where `combine` has to abide by the associativity law
 ```scala
 (a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 
@@ -50,6 +50,7 @@ trait SemigroupLaws[A] {
     (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 }
 ```
+[[Reference - Semigroup]](https://en.wikipedia.org/wiki/Semigroup)
 
 ### Monoid
 A monoid is a specialization of a semigrup that adds to the structure and identity element ([more](https://en.wikipedia.org/wiki/Monoid)). Here is defined as 
