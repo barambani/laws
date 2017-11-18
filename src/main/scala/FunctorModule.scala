@@ -7,10 +7,10 @@ import Algebra.Id
 object FunctorModule {
 
   trait Functor[F[_]] {
-    def fmap[A, B]: F[A] => (A => B) => F[B]
+    def map[A, B]: F[A] => (A => B) => F[B]
     
     def lift[A, B]: (A => B) => F[A] => F[B] =
-      f => fa => fmap(fa)(f)
+      f => fa => map(fa)(f)
   }
 
   object Functor {
@@ -18,30 +18,30 @@ object FunctorModule {
   }
 
   implicit final class FunctorSyntax[F[_]: Functor, A](fa: F[A]) {
-    def fmap[B]: (A => B) => F[B] =
-      f => Functor[F].fmap(fa)(f)
+    def map[B]: (A => B) => F[B] =
+      f => Functor[F].map(fa)(f)
   }
 
   sealed trait FunctorLaws[F[_]] {
 
     implicit def F: Functor[F]
     
-    def fmapPreservesIdentity[A]: F[A] => Boolean =
-      fa => (fa fmap identity[A]) == fa
+    def mapPreservesIdentity[A]: F[A] => Boolean =
+      fa => (fa map identity[A]) == fa
 
-    def fmapPreservesComposition[A, B, C]: F[A] => (A => B) => (B => C) => Boolean =
-      fa => f => g => (fa fmap (g compose f)) == (fa fmap f fmap g)
+    def mapPreservesComposition[A, B, C]: F[A] => (A => B) => (B => C) => Boolean =
+      fa => f => g => (fa map (g compose f)) == (fa map f map g)
   }
 
   sealed trait FunctorLawsNoInfix[F[_]] {
 
     implicit def F: Functor[F]
   
-    def fmapPreservesIdentity[A]: F[A] => Boolean =
-      fa => F.fmap(fa)(identity[A]) == fa
+    def mapPreservesIdentity[A]: F[A] => Boolean =
+      fa => F.map(fa)(identity[A]) == fa
 
-    def fmapPreservesComposition[A, B, C]: F[A] => (A => B) => (B => C) => Boolean =
-      fa => f => g => F.fmap(fa)(g compose f) == F.fmap(F.fmap(fa)(f))(g)
+    def mapPreservesComposition[A, B, C]: F[A] => (A => B) => (B => C) => Boolean =
+      fa => f => g => F.map(fa)(g compose f) == F.map(F.map(fa)(f))(g)
   }
 
   object FunctorLaws {
@@ -58,40 +58,40 @@ object FunctorModule {
 
     implicit val listFunctor: Functor[List] =
       new Functor[List] {
-        def fmap[A, B]: List[A] => (A => B) => List[B] =
+        def map[A, B]: List[A] => (A => B) => List[B] =
           fa => f => fa map f
       }
 
     implicit val optionFunctor: Functor[Option] =
       new Functor[Option] {
-        def fmap[A, B]: Option[A] => (A => B) => Option[B] =
+        def map[A, B]: Option[A] => (A => B) => Option[B] =
           fa => f => fa map f
       }
 
     implicit def eitherFunctor[E]: Functor[Either[E, ?]] =
       new Functor[Either[E, ?]] {
-        def fmap[A, B]: Either[E, A] => (A => B) => Either[E, B] =
+        def map[A, B]: Either[E, A] => (A => B) => Either[E, B] =
           fa => f => fa map f
       }
 
     implicit def functionFunctor[X]: Functor[Func[X, ?]] =
       new Functor[Func[X, ?]] {
-        def fmap[A, B]: Func[X, A] => (A => B) => Func[X, B] =
+        def map[A, B]: Func[X, A] => (A => B) => Func[X, B] =
           fa => f => Func[X, B](f compose fa.apply)
       }
 
     implicit val treeFunctor: Functor[Tree] =
       new Functor[Tree] {
-        def fmap[A, B]: Tree[A] => (A => B) => Tree[B] =
+        def map[A, B]: Tree[A] => (A => B) => Tree[B] =
           fa => f => fa match {
-            case Branch(l, r) => Branch(fmap(l)(f), fmap(r)(f))
+            case Branch(l, r) => Branch(map(l)(f), map(r)(f))
             case Leaf(v) => (Leaf.apply[B] _ compose f)(v)
           }
       }
 
     implicit val idFunctor: Functor[Id] =
       new Functor[Id] {
-        def fmap[A, B]: Id[A] => (A => B) => Id[B] =
+        def map[A, B]: Id[A] => (A => B) => Id[B] =
           fa => f => f(fa)
       }
   }

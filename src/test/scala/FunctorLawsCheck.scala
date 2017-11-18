@@ -26,21 +26,21 @@ abstract class FunctorLawsCheck[F[_] : Functor, A, B](name: String)(
   val lawsNoInfix = FunctorLawsNoInfix[F]
 
   property(" Functor's Map Preserves Identity") = forAll {
-    (fa: F[A]) => laws.fmapPreservesIdentity(fa)
+    (fa: F[A]) => laws.mapPreservesIdentity(fa)
   }
 
   property(" Functor's Map Preserves Composition") = forAll {
     (fa: F[A], f: A => B, g: B => Boolean) => 
-      laws.fmapPreservesComposition(fa)(f)(g)
+      laws.mapPreservesComposition(fa)(f)(g)
   }
 
   property(" Functor's Map Preserves Identity No Infix") = forAll {
-    (fa: F[A]) => lawsNoInfix.fmapPreservesIdentity(fa)
+    (fa: F[A]) => lawsNoInfix.mapPreservesIdentity(fa)
   }
 
   property(" Functor's Map Preserves Composition No Infix") = forAll {
     (fa: F[A], f: A => B, g: B => Boolean) => 
-      lawsNoInfix.fmapPreservesComposition(fa)(f)(g)
+      lawsNoInfix.mapPreservesComposition(fa)(f)(g)
   }
 }
 

@@ -16,12 +16,12 @@ object ApplicativeModule {
     def ap[A, B]: F[A] => F[A => B] => F[B]
 
     def map2[A, B, C](fa: F[A], fb: F[B])(f: (A, B) => C): F[C] =
-      ap(fa)(fmap(fb) { b => a => f(a, b) })
+      ap(fa)(map(fb) { b => a => f(a, b) })
 
     def product[A, B]: F[A] => F[B] => F[(A, B)] =
-      fa => fb => ap(fa)(fmap(fb){ b => a => (a, b) })
+      fa => fb => ap(fa)(map(fb){ b => a => (a, b) })
     
-    def fmap[A, B]: F[A] => (A => B) => F[B] =
+    def map[A, B]: F[A] => (A => B) => F[B] =
       fa => f => ap(fa)(pure(f))
   }
 
@@ -53,7 +53,7 @@ object ApplicativeModule {
       a => ff => (F.pure(a) <*> ff) == (ff <*> F.pure((f: A => B) => f(a)))
   
     def applicativeMap[A, B]: F[A] => (A => B) => Boolean =
-      fa => f => (fa fmap f) == (fa <*> F.pure(f))
+      fa => f => (fa map f) == (fa <*> F.pure(f))
   }
 
   sealed trait ApplicativeLawsNoInfix[F[_]] {
@@ -70,7 +70,7 @@ object ApplicativeModule {
       a => ff => F.ap(F.pure(a))(ff) == F.ap[A => B, B](ff)(F.pure(f => f(a)))
 
     def applicativeMap[A, B]: F[A] => (A => B) => Boolean =
-      fa => f => F.fmap(fa)(f) == F.ap(fa)(F.pure(f))
+      fa => f => F.map(fa)(f) == F.ap(fa)(F.pure(f))
   }
 
   object ApplicativeLaws {

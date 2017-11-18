@@ -15,9 +15,9 @@ object MonadModule {
       `return`
     
     def ap[A, B]: F[A] => F[A => B] => F[B] =
-      fa => ff => bind(fa) { a => fmap(ff) { f => f(a) } }
+      fa => ff => bind(fa) { a => map(ff) { f => f(a) } }
 
-    override def fmap[A, B]: F[A] => (A => B) => F[B] =
+    override def map[A, B]: F[A] => (A => B) => F[B] =
       ma => f => bind(ma) { a => (`return` compose f)(a) }
   }
 
