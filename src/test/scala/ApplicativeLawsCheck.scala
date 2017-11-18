@@ -16,7 +16,7 @@ import Algebra.Func
 import ArbitraryImplicits._
 import SemigroupModule.SemigroupInstances._
 
-abstract class ApplicativeLawsCheck[F[_] : Applicative, A, B](name: String)(
+sealed abstract class ApplicativeLawsCheck[F[_] : Applicative, A, B](name: String)(
   implicit
     AA : Arbitrary[A],
     ABA: Arbitrary[F[A]],

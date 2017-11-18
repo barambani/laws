@@ -15,7 +15,7 @@ import FunctorModule.FunctorLawsNoInfix
 import FunctorModule.FunctorInstances._
 import ArbitraryImplicits._
 
-abstract class FunctorLawsCheck[F[_] : Functor, A, B](name: String)(
+sealed abstract class FunctorLawsCheck[F[_] : Functor, A, B](name: String)(
   implicit
     AFI: Arbitrary[F[A]],
     AAB: Arbitrary[A => B],
