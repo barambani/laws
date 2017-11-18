@@ -29,18 +29,18 @@ An extra file containing the supporting **_Algebra_** is also given. For further
 
 ## Implementation and Laws
 ### Semigroup
-A semigroup consists of a *set* `A` (*type for us from now on*) and a binary operation (*combine*)
+A *semigroup* consists of a *set* `A` (*type for us from now on*) and a binary operation (`combine`)
 ```scala
 trait Semigroup[A] {
   def combine: (A, A) => A
 }
 ```
-where `combine` has to abide by the associativity law
+where `combine` has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
 ```scala
 (a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 
 ```
-*Notice that the syntax extension allows us to use the notation `<>` for the combine operation. The right hand side of the expression above, in fact, is the actual definition of the law in the code (see below)*
+*Notice that the syntax extension allows us to use the notation `<>` for the `combine` operation. The right hand side of the expression above, in fact, is the actual body of the law definition in the code (see below)*
 ```scala
 trait SemigroupLaws[A] {
 
@@ -53,16 +53,28 @@ trait SemigroupLaws[A] {
 [[Reference - Semigroup]](https://en.wikipedia.org/wiki/Semigroup)
 
 ### Monoid
-A monoid is a specialization of a semigrup that adds to the structure and identity element ([more](https://en.wikipedia.org/wiki/Monoid)). Here is defined as 
+A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element 
 ```scala
 trait Monoid[A] extends Semigroup[A] {
-  def empty: A
+  val empty: A
 }
 ```
-and other than the operation associativity it has to respect also the identity law as in
+that has to satisfy the identity law for every `a` in `A`
 ```scala
 (a: A) => (a <> empty) == a && (empty <> a) == a
 ```
+*Note that in the code, to access the `Monoid[A]` `empty` element we have to go through the implicit handle for the instance in use. This is not present in the expression above just to keep the read more fluent*
+```scala
+sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
+
+  implicit def F: Monoid[A]
+
+  def emptyIdentity(a: A): Boolean =
+    (a <> F.empty) == a && (F.empty <> a) == a
+}
+```
+[[Reference - Monoid]](https://en.wikipedia.org/wiki/Monoid)
+
 ### Covariant Functor (Functor)
 ### Contravariant Functor (Contravariant)
 ### Invariant Functor (Invariant)
