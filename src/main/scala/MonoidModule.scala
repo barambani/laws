@@ -7,7 +7,7 @@ import SemigroupModule.SemigroupInstances._
 object MonoidModule {
 
   trait Monoid[A] extends Semigroup[A] {
-    def empty: A
+    val empty: A
   }
 
   object Monoid {
@@ -17,7 +17,7 @@ object MonoidModule {
     def newInstance[A](z: A, SA: Semigroup[A]): Monoid[A] =
       new Monoid[A] {
         def combine: (A, A) => A = SA.combine
-        def empty: A = z
+        val empty: A = z
       }
   }
 
