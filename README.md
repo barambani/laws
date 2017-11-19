@@ -76,7 +76,7 @@ sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 [[Reference - Monoid]](https://en.wikipedia.org/wiki/Monoid)
 
 ### Covariant Functor (Functor)
-A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. This means that given a *functor* `fa` it's possible to obtain another *functor* `fb` that has the same structure as `fa`, applying a *function* `f: a -> b` to every element of `fa`. This is the first type class of we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala it can be represented as
+A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. This means that given a *functor* `fa` it's possible to obtain another *functor* `fb` that has the same structure as `fa`, applying a *function* `f: a -> b` to every element of `fa`. This is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala it can be represented as
 ```scala
 trait Functor[F[_]] {
   def map[A, B]: F[A] => (A => B) => F[B]
