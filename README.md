@@ -76,7 +76,7 @@ sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 [[Reference - Monoid]](https://en.wikipedia.org/wiki/Monoid)
 
 ### Covariant Functor (Functor)
-A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. This means that given a *functor* `fa` it's possible to obtain another *functor* `fb` that has the same structure as `fa`, applying a *function* `f: a -> b` to every element of `fa`. This is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case first order kinded types or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala it can be represented as
+A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. This means that given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure of `fa`, applying a *function* `f: a -> b` to every element of `fa`. This is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case first order kinded types or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala it can be represented as
 ```scala
 trait Functor[F[_]] {
   def map[A, B]: F[A] => (A => B) => F[B]
@@ -87,7 +87,7 @@ trait Functor[F[_]] {
 ```
 Notice that looking at the `lift` function (`fmap` in Haskell) we can see another capability that the *functor* provides. It allows, in fact, to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* a function into the context `F[_]`.
 
-Anyway, for an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation must preserve the identity morphism for every `F[A]` in `A` and the composition of morphisms for every `F[A]` in `A` and every `f` from `A` => `B` and `g` from `B` => `C`
+For an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation must preserve the identity morphism for every `F[A]` in `A` and the composition of morphisms for every `F[A]` in `A` and every `f` from `A` => `B` and `g` from `B` => `C`
 ```scala
 (fa: F[A]) => (fa map identity[A]) == fa
 (fa: F[A], f: A => B, g: B => C) => (fa map (g compose f)) == (fa map f map g)
