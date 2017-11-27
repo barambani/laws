@@ -5,7 +5,7 @@ Laws is a set of sample implementations of the fundamental functional programmin
 
 ## Structure
 Currently the project includes the following type classes
-```scala
+```
 - Semigroup
 - Monoid
 - Covariant Functor (Functor)
@@ -15,17 +15,19 @@ Currently the project includes the following type classes
 - Applicative Functor (Applicative)
 - Monad
 
-// (*) No laws implemented
+(*) No laws implemented
 ```
-Each type class lives in its own **_Scala_** file called **_Module_**. The module provides
+Each type class lives in its own **_Scala_** file called **_Module_** and every module provides
 
-  * the type class definition
-  * a set of instances
-  * a syntax extension
-  * a definition of the laws using syntax extensions
-  * a definition of the laws using the type class functions
+```
+- the type class definition
+- a set of instances
+- a syntax extension
+- a definition of the laws using syntax extensions
+- a definition of the laws using the type class functions
+```
 
-An extra file containing the supporting **_Algebra_** is also given. For further details the best is to [navigate the code itself](https://github.com/barambani/laws/tree/master/src/main/scala).
+An extra file with the supporting **_Algebra_** completes the project. The structure of the source code, as can be seen, is very linear and easy to navigate so, for further details, the best advise is to [look into the the code itself](https://github.com/barambani/laws/tree/master/src/main/scala).
 
 ## Implementation and Laws
 ### Semigroup
