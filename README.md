@@ -52,7 +52,7 @@ trait SemigroupLaws[A] {
     (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 }
 ```
-[[Reference - Semigroup]](https://en.wikipedia.org/wiki/Semigroup)
+[ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/SemigroupModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/SemigroupLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Semigroup) ]
 
 ### Monoid
 A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element 
@@ -75,7 +75,7 @@ sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
     (a <> F.empty) == a && (F.empty <> a) == a
 }
 ```
-[[Reference - Monoid]](https://en.wikipedia.org/wiki/Monoid)
+[ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/MonoidModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/MonoidLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Monoid) ]
 
 ### Covariant Functor (Functor)
 A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. More specifically, given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure as `fa`, through the application of a *function* `f: a -> b` to every element in `fa`. To note, this is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case first order kinded types or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala we can represent these concepts as
@@ -95,7 +95,7 @@ For an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation 
 (fa: F[A], f: A => B, g: B => C) => (fa map (g compose f)) == (fa map f map g)
 ```
 
-[[Reference - Covariant Functor]](https://en.wikipedia.org/wiki/Functor)
+[ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/FunctorModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/FunctorLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Functor) ]
 
 ### Contravariant Functor (Contravariant)
 ### Invariant Functor (Invariant)
