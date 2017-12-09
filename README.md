@@ -98,7 +98,7 @@ For an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation 
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/FunctorModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/FunctorLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Functor) ]
 
 ### Contravariant Functor (Contravariant)
-If we focus on the adaptive semantic of the *functor* clearly visible in its *Function1* instance
+To understand what a *contravariant functor* is let's focus on the adaptive semantic of the *functor* clearly visible in its *Function1* instance below.
 ```scala
 implicit def functionFunctor[X]: Functor[Func[X, ?]] =
   new Functor[Func[X, ?]] {
@@ -106,7 +106,7 @@ implicit def functionFunctor[X]: Functor[Func[X, ?]] =
       fa => f => Func[X, B](f compose fa.apply)
   }
 ```
-where it allows to transform the **output** type inside the *Function1* context, and if we keep reasoning along the same line, we can start noticing that we might want to adapt also the **input** type of that context. We are saying this here because the *contravariant functor* allows us to do exactly that. This is in fact the *Function1* instance for it
+We can see that it allows to transform the function **output** type inside the *Function1* context through its `map`. Reasoning along the same line, we could argue that we might want to adapt also the **input** type of *Function1* but clearly `map` cannot do that. Once our problem is clear it will be easier to see that *contravariant functor* provides exactly that behavior. Let's have a look at its *Function1* instance
 ```scala
 implicit def funcContravariant[Y]: Contravariant[Func[?, Y]] =
   new Contravariant[Func[?, Y]] {
@@ -114,13 +114,13 @@ implicit def funcContravariant[Y]: Contravariant[Func[?, Y]] =
       fb => f => Func[A, Y](fb.apply _ compose f)
   }
 ```
-The reader might notice that satisfying just this very specific need wouldn't be worth the troubles to formalize an abstraction, and that's correct. *Contravariant functor* in fact doesn't work only in this particular scenario, on the contrary it generalizes this behavior and applies the adaptation in any other context that models a form of processing. To give an example, if we consider a `Show[B]` abstraction defined as
+The reader might observe that satisfying just this very specific need wouldn't be worth the troubles of an abstraction formalization and that's absolutely reasonable objection. *Contravariant functor* in fact doesn't work only in this particular scenario. On the contrary its peculiarity is that it generalizes this behavior and applies the adaptation to any other context that models a form of processing. That is the same as saying that we can have this feature for any *higher order type operator* for which we can define a `contramap[A, B]`. As an example, let's consider a `Show[B]` abstraction defined as
 ```scala
 trait Show[B] {
   def show: B => String
 }
 ```
-that converts to string a type `B`, a *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because it can generate a `Show[A]` given an `A => B` so that we don't have even to provide the implementation for `show: A => String`. All we have to do is use the `contramap` function like in the example below
+that converts to string a type `B`. A *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because we implemented a valid `contramap` for show, so we can generate a `Show[A]` given an `A => B` withiout even providing the implementation for `show: A => String`. All we have to do is use the `contramap` function like in the example below making sure all the types are in line.
 ```scala
 val fb: Show[B] = Show[B]
 val f: A => B = ???
