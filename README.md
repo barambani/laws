@@ -78,7 +78,7 @@ sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/MonoidModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/MonoidLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Monoid) ]
 
 ### Covariant Functor (Functor)
-A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. More specifically, given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure as `fa`, through the application of a *function* `f: a -> b` to every element in `fa`. To note, this is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case first order kinded types or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala we can represent these concepts as
+A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. More specifically, given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure as `fa`, through the application of a *function* `f: a -> b` to every element in `fa`. To note, this is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case *first order kinded types* or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala we can represent these concepts as
 ```scala
 trait Functor[F[_]] {
   def map[A, B]: F[A] => (A => B) => F[B]
@@ -87,7 +87,7 @@ trait Functor[F[_]] {
     f => fa => map(fa)(f)
 }
 ```
-Notice that looking at the `lift` function (`fmap` in Haskell) we can see another important capability that the *functor* has. It allows, in fact, to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* a function into the context `F[_]`.
+Notice that looking at the `lift[A, B]` function (`fmap` in Haskell) we can see another important capability that the *functor* has. It allows, in fact, to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* a function into the context `F[_]`.
 
 For an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation must preserve the identity morphism for every `F[A]` in `A` and the composition of morphisms for every `F[A]` in `A` and every `f` from `A` => `B` and `g` from `B` => `C`
 ```scala
@@ -98,6 +98,57 @@ For an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation 
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/FunctorModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/FunctorLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Functor) ]
 
 ### Contravariant Functor (Contravariant)
+If we focus on the adaptive semantic of the *functor* clearly visible in its *Function1* instance
+```scala
+implicit def functionFunctor[X]: Functor[Func[X, ?]] =
+  new Functor[Func[X, ?]] {
+    def map[A, B]: Func[X, A] => (A => B) => Func[X, B] =
+      fa => f => Func[X, B](f compose fa.apply)
+  }
+```
+where it allows to transform the **output** type inside the *Function1* context, and if we keep reasoning along the same line, we can start noticing that we might want to adapt also the **input** type of that context. We are saying this here because the *contravariant functor* allows us to do exactly that. This is in fact the *Function1* instance for it
+```scala
+implicit def funcContravariant[Y]: Contravariant[Func[?, Y]] =
+  new Contravariant[Func[?, Y]] {
+    def contramap[A, B]: Func[B, Y] => (A => B) => Func[A, Y] =
+      fb => f => Func[A, Y](fb.apply _ compose f)
+  }
+```
+The reader might notice that satisfying just this very specific need wouldn't be worth the troubles to formalize an abstraction, and that's correct. *Contravariant functor* in fact doesn't work only in this particular scenario, on the contrary it generalizes this behavior and applies the adaptation in any other context that models a form of processing. To give an example, if we consider a `Show[B]` abstraction defined as
+```scala
+trait Show[B] {
+  def show: B => String
+}
+```
+that converts to string a type `B`, a *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because it can generate a `Show[A]` given an `A => B` and we actually don't have to provide the implementation for `def show: A => String` at all. Instead, all we have to do is use the `contramap` function like in the example below
+```scala
+val fb: Show[B] = Show[B]
+val f: A => B = ???
+
+// this gives us a working instance of Show[A] fully implemented
+val fa: Show[A] = fb contramap f
+
+val anA: A = ???
+fa.show(anA) // Works fine
+```
+The *contravariant functor type class* is defined as
+```scala
+trait Contravariant[F[_]] {
+  def contramap[A, B]: F[B] => (A => B) => F[A]
+  
+  def lift[A, B]: (A => B) => F[B] => F[A] =
+    f => fb => contramap(fb)(f)
+}
+```
+where the `contramap` function does all the magic. Any instance of it, to be valid, needs to abide by the following laws (that are actually the dual of the *functor*'s laws)
+```scala
+(fa: F[A]) => (fa contramap identity[A]) == fa
+(fc: F[C], f: A => B, g: B => C) => (fc contramap (g compose f)) == (fc contramap g contramap f)
+```
+Observe that also *contravariant functor* provides a `lift[A, B]` function (that's actually what's called `contramap` in Haskell), and it can be simply considered, like in the case of *functor*, a way to lift a function into a context, but in an inverted way. 
+
+[ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/ContravariantModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/ContravariantLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Functor#Covariance_and_contravariance) ]
+
 ### Invariant Functor (Invariant)
 ### Cartesian
 ### Applicative Functor (Applicative)
