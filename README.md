@@ -106,7 +106,7 @@ implicit def functionFunctor[X]: Functor[Func[X, ?]] =
       fa => f => Func[X, B](f compose fa.apply)
   }
 ```
-We can see that it allows to transform the function **output** type inside the *Function1* context through its `map`. Reasoning along the same line, we could argue that we might want to adapt also the **input** type of *Function1* but clearly `map` cannot do that. Once our problem is clear it will be easier to see that *contravariant functor* provides exactly that behavior. Let's have a look at its *Function1* instance
+We can see that it allows to transform the **output** type inside the context *Function1* through its `map`. Reasoning along the same line, we could argue that we might want to adapt also the **input** type of *Function1*, but clearly `map` cannot do that. The types don't align. This is exactly what a *contravariant functor* is designed to resolve with its `contramap`. Let's have a look at the instance for *Function1*
 ```scala
 implicit def funcContravariant[Y]: Contravariant[Func[?, Y]] =
   new Contravariant[Func[?, Y]] {
@@ -120,7 +120,7 @@ trait Show[B] {
   def show: B => String
 }
 ```
-that converts to string a type `B`. A *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because we implemented a valid `contramap` for show, so we can generate a `Show[A]` given an `A => B` withiout even providing the implementation for `show: A => String`. All we have to do is use the `contramap` function like in the example below making sure all the types are in line.
+that converts to string a type `B`. A *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because we implemented a valid `contramap` for `Show` that can generate a `Show[A]` given an `A => B` withiout even providing the implementation for `show: A => String`. All we have to do is use the `contramap` function like in the example below making sure all the types align.
 ```scala
 val fb: Show[B] = Show[B]
 val f: A => B = ???
@@ -140,12 +140,12 @@ trait Contravariant[F[_]] {
     f => fb => contramap(fb)(f)
 }
 ```
-where the `contramap` function does all the magic. Any instance of it, to be valid, needs to abide by the following laws (that are actually the dual of the *functor*'s laws)
+A valid instance of this *type class* needs to abide by the following laws (that are actually the dual of the *functor*'s laws)
 ```scala
 (fa: F[A]) => (fa contramap identity[A]) == fa
 (fc: F[C], f: A => B, g: B => C) => (fc contramap (g compose f)) == (fc contramap g contramap f)
 ```
-Observe that also *contravariant functor* provides a `lift[A, B]` function (that's actually what's called `contramap` in Haskell), and it can be simply considered, like in the case of *functor*, a way to lift a function into a context, but in an inverted way. 
+Observe that also *contravariant functor* provides a function `lift[A, B]` (that's actually what's called `contramap` in Haskell). It can be simply seen, like in the case of *functor*, as a way to lift a function into a context, but in an inverted way. 
 
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/ContravariantModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/ContravariantLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Functor#Covariance_and_contravariance) ]
 
