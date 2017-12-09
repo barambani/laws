@@ -2,6 +2,8 @@ import scala.language.higherKinds
 
 import Algebra.{Box, Show}
 import Algebra.Show._
+import Algebra.Func
+import Algebra.Tree
 import ArbitraryImplicits._
 import ContravariantModule.ContravariantLaws
 import ContravariantModule.ContravariantLawsNoInfix
@@ -39,3 +41,4 @@ sealed abstract class ContravariantLawsCheck[F[_] : Contravariant, A, B, C](name
 
 object ShowIntContravariantLawsCheck extends ContravariantLawsCheck[Show, Int, String, Int]("Show of Int")
 object ShowBoxContravariantLawsCheck extends ContravariantLawsCheck[Show, Box[Boolean], Int, Boolean]("Show of Box")
+object IntFuncContravariantLawsCheck extends ContravariantLawsCheck[Func[?, Int], Box[Boolean], Tree[Double], String]("Function to Int")

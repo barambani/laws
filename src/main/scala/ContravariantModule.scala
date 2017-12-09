@@ -1,6 +1,7 @@
 import scala.language.higherKinds
 
 import Algebra.Show
+import Algebra.Func
 
 object ContravariantModule {
 
@@ -61,6 +62,12 @@ object ContravariantModule {
           sb => f => Show.newInstance[A] {
             a => (sb.show compose f)(a) 
           }
+      }
+
+    implicit def funcContravariant[Y]: Contravariant[Func[?, Y]] =
+      new Contravariant[Func[?, Y]] {
+        def contramap[A, B]: Func[B, Y] => (A => B) => Func[A, Y] =
+          fb => f => Func[A, Y](fb.apply _ compose f)
       }
   }
 }
