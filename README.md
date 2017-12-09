@@ -120,7 +120,7 @@ trait Show[B] {
   def show: B => String
 }
 ```
-that converts to string a type `B`, a *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because it can generate a `Show[A]` given an `A => B` and we actually don't have to provide the implementation for `def show: A => String` at all. Instead, all we have to do is use the `contramap` function like in the example below
+that converts to string a type `B`, a *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because it can generate a `Show[A]` given an `A => B` so that we don't have even to provide the implementation for `show: A => String`. All we have to do is use the `contramap` function like in the example below
 ```scala
 val fb: Show[B] = Show[B]
 val f: A => B = ???
