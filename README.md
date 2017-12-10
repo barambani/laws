@@ -139,7 +139,7 @@ trait Contravariant[F[_]] {
     f => fb => contramap(fb)(f)
 }
 ```
-A valid instance of this *type class* needs to abide by the following laws (that are actually the dual of the *functor*'s laws)
+A valid instance of this *type class* needs to abide by the following laws (that are actually dual to the *functor*'s laws)
 ```scala
 (fa: F[A]) => (fa contramap identity[A]) == fa
 (fc: F[C], f: A => B, g: B => C) => (fc contramap (g compose f)) == (fc contramap g contramap f)
