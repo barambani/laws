@@ -5,18 +5,17 @@ Laws is a set of sample implementations of the fundamental functional programmin
 
 ## Structure
 Currently the project includes the following type classes
-```
-- Semigroup
-- Monoid
-- Covariant Functor (Functor)
-- Contravariant Functor (Contravariant)
-- Invariant Functor (Invariant)
-- Cartesian (*)
-- Applicative Functor (Applicative)
-- Monad
+- [Semigroup](#semigroup)
+- [Monoid](#monoid)
+- [Covariant Functor (Functor)](#covariant-functor-functor)
+- [Contravariant Functor (Contravariant)](#contravariant-functor-contravariant)
+- [Invariant Functor (Invariant)](#invariant-functor-invariant)
+- [Cartesian](#cartesian) (*)
+- [Applicative Functor (Applicative)](#applicative-functor-applicative)
+- [Monad](#monad)
 
 (*) No laws implemented
-```
+
 Each type class lives in its own **_Scala_** file called **_Module_** and every module provides
 
 ```
