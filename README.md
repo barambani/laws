@@ -30,18 +30,18 @@ An extra file with the supporting **_Algebra_** completes the project. The struc
 
 ## Implementation and Laws
 ### Semigroup
-A *semigroup* consists of a *set* `A` (*type for us from now on*) and a binary operation `combine`
+A *semigroup* consists of a *set* `A` (*type for us from now on*) and a binary operation `combine`.
 ```scala
 trait Semigroup[A] {
   def combine: (A, A) => A
 }
 ```
-where `combine` has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
+For the *set* to be a valid *semigroup* the `combine` operation has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
 ```scala
 (a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 
 ```
-*Notice that the syntax extension allows us to use the notation `<>` for the `combine` operation. The right hand side of the expression above, in fact, is the actual body of the law definition in the code itself (see below)*
+*Notice that the syntax extension allows us to use the more compact notation `<>` for `combine`. The right hand side of the expression above, in fact, is the actual body of the law definition in the code itself (see below)*
 ```scala
 trait SemigroupLaws[A] {
 
@@ -54,17 +54,17 @@ trait SemigroupLaws[A] {
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/SemigroupModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/SemigroupLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Semigroup) ]
 
 ### Monoid
-A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element 
+A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element. A possible implementation is
 ```scala
 trait Monoid[A] extends Semigroup[A] {
   val empty: A
 }
 ```
-that has to satisfy the identity law for every `a` in `A`
+where the `empty` element has to satisfy the identity law for every `a` in `A`
 ```scala
 (a: A) => (a <> empty) == a && (empty <> a) == a
 ```
-*Note that in the code, to access the `Monoid[A]` `empty` element we have to go through the implicit handle for the instance in use. This is not present in the expression above just to keep the read more fluent*
+*Worth nothing that in the actual implementation of the law, we had to go through the implicit handle for the instance in use to access the `Monoid[A]` `empty` element. This is not present in the expression above just to keep the read more fluent*. The real implementation is in fact
 ```scala
 sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 
