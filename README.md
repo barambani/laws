@@ -30,7 +30,7 @@ An extra file with the supporting **_Algebra_** completes the project. The struc
 
 ## Implementation and Laws
 ### Semigroup
-A *semigroup* consists of a *set* `A` (*type for us from now on*) and a binary operation (`combine`)
+A *semigroup* consists of a *set* `A` (*type for us from now on*) and a binary operation `combine`
 ```scala
 trait Semigroup[A] {
   def combine: (A, A) => A
