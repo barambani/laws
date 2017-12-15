@@ -113,7 +113,7 @@ implicit def funcContravariant[Y]: Contravariant[Func[?, Y]] =
       fb => f => Func[A, Y](fb.apply _ compose f)
   }
 ```
-The reader might observe that satisfying just this very specific need wouldn't be worth the troubles of an abstraction formalization and that's an absolutely reasonable objection. *Contravariant functor* in fact doesn't work only in this particular scenario. On the contrary its peculiarity is that it generalizes this behavior and applies the adaptation to any other context that models a form of processing. That is the same as saying that we can have this feature for any *higher order type operator* for which we can define a `contramap[A, B]`. As an example, let's consider a `Show[B]` abstraction defined as
+The reader might observe that satisfying just this very specific need wouldn't be worth the troubles of an abstraction formalization and that's an absolutely reasonable objection. *Contravariant functor* actually doesn't work only in this particular scenario. On the contrary its peculiarity is that it generalizes this behavior and applies the adaptation to any other context that models a form of processing. That is the same as saying that we can have this feature for any *higher order type operator* for which we can define a `contramap[A, B]`. As an example, let's consider a `Show[B]` abstraction defined as
 ```scala
 trait Show[B] {
   def show: B => String
