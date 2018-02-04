@@ -36,7 +36,7 @@ trait Semigroup[A] {
   def combine: (A, A) => A
 }
 ```
-For the *set* to be a valid *semigroup* the `combine` operation has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
+For the *set* `A` to be a valid *semigroup* the `combine` operation has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
 ```scala
 (a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 
@@ -54,13 +54,13 @@ trait SemigroupLaws[A] {
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/SemigroupModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/SemigroupLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Semigroup) ]
 
 ### Monoid
-A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element. A possible implementation is
+A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element. With identity element we mean an elemnt in the *type* `A` that, combined with any other element in `A` (trhough the `combine` operation), gives the other element itself. A possible implementation is
 ```scala
 trait Monoid[A] extends Semigroup[A] {
   val empty: A
 }
 ```
-where the `empty` element has to satisfy the identity law for every `a` in `A`
+and, as per its own definition, the `empty` element has to satisfy the identity law for every `a` in `A`
 ```scala
 (a: A) => (a <> empty) == a && (empty <> a) == a
 ```
