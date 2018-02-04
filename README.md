@@ -14,7 +14,7 @@ Currently the project includes the following type classes
 - [Applicative Functor (Applicative)](#applicative-functor-applicative)
 - [Monad](#monad)
 
-(*) No laws implemented
+(*) No laws abided by
 
 Each type class lives in its own **_Scala_** file called **_Module_** and every module provides
 
