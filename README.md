@@ -54,7 +54,7 @@ trait SemigroupLaws[A] {
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/SemigroupModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/SemigroupLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Semigroup) ]
 
 ### Monoid
-A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element. With identity element we mean an elemnt in the *type* `A` that, combined with any other element in `A` (trhough the `combine` operation), gives the other element itself. A possible implementation is
+A *monoid* is a specialization of a *semigroup*. To be a *monoid* any *semigroup* needs to define also an identity element. With identity element we mean an elemnt in the *type* `A` that, when combined with any other element in `A` trhough the `combine` operation, results in the other element itself. A possible implementation is
 ```scala
 trait Monoid[A] extends Semigroup[A] {
   val empty: A
