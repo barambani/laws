@@ -33,15 +33,15 @@ object InvariantModule {
         fa.imap(g compose f)(f1 compose g1) == fa.imap(f)(f1).imap(g)(g1)
   }
 
-  sealed trait InvariantLawsNoInfix[F[_]] {
+  sealed trait InvariantLawsNoSyntax[F[_]] {
 
     implicit def F: Invariant[F]
-  
+
     def imapPreservesIdentity[A]: F[A] => Boolean =
       fa => F.imap(fa)(identity[A])(identity[A]) == fa
 
     def imapPreservesComposition[A, B, C]: F[A] => (A => B) => (B => A) => (B => C) => (C => B) => Boolean =
-      fa => f => f1 => g => g1 => 
+      fa => f => f1 => g => g1 =>
         F.imap(fa)(g compose f)(f1 compose g1) == F.imap(F.imap(fa)(f)(f1))(g)(g1)
   }
 
@@ -49,10 +49,10 @@ object InvariantModule {
     def apply[F[_]](implicit FI: Invariant[F]): InvariantLaws[F] =
       new InvariantLaws[F] { def F = FI }
   }
-  
-  object InvariantLawsNoInfix {
-    def apply[F[_]](implicit FI: Invariant[F]): InvariantLawsNoInfix[F] =
-      new InvariantLawsNoInfix[F] { def F = FI }
+
+  object InvariantLawsNoSyntax {
+    def apply[F[_]](implicit FI: Invariant[F]): InvariantLawsNoSyntax[F] =
+      new InvariantLawsNoSyntax[F] { def F = FI }
   }
 
   object InvariantInstances {

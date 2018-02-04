@@ -33,10 +33,10 @@ object ContravariantModule {
       fc => f => g => (fc contramap (g compose f)) == (fc contramap g contramap f)
   }
 
-  sealed trait ContravariantLawsNoInfix[F[_]] {
+  sealed trait ContravariantLawsNoSyntax[F[_]] {
 
     implicit def F: Contravariant[F]
-    
+
     def contramapPreservesIdentity[A]: F[A] => Boolean =
       fa => F.contramap(fa)(identity[A]) == fa
 
@@ -48,10 +48,10 @@ object ContravariantModule {
     def apply[F[_]](implicit FI: Contravariant[F]): ContravariantLaws[F] =
       new ContravariantLaws[F] { def F = FI }
   }
-  
-  object ContravariantLawsNoInfix {
-    def apply[F[_]](implicit FI: Contravariant[F]): ContravariantLawsNoInfix[F] =
-      new ContravariantLawsNoInfix[F] { def F = FI }
+
+  object ContravariantLawsNoSyntax {
+    def apply[F[_]](implicit FI: Contravariant[F]): ContravariantLawsNoSyntax[F] =
+      new ContravariantLawsNoSyntax[F] { def F = FI }
   }
 
   object ContravariantInstances {

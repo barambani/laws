@@ -33,10 +33,10 @@ object FunctorModule {
       fa => f => g => (fa map (g compose f)) == (fa map f map g)
   }
 
-  sealed trait FunctorLawsNoInfix[F[_]] {
+  sealed trait FunctorLawsNoSyntax[F[_]] {
 
     implicit def F: Functor[F]
-  
+
     def mapPreservesIdentity[A]: F[A] => Boolean =
       fa => F.map(fa)(identity[A]) == fa
 
@@ -45,13 +45,13 @@ object FunctorModule {
   }
 
   object FunctorLaws {
-    def apply[F[_]](implicit FI: Functor[F]): FunctorLaws[F] = 
+    def apply[F[_]](implicit FI: Functor[F]): FunctorLaws[F] =
       new FunctorLaws[F] { def F = FI }
   }
-  
-  object FunctorLawsNoInfix {
-    def apply[F[_]](implicit FI: Functor[F]): FunctorLawsNoInfix[F] =
-      new FunctorLawsNoInfix[F] { def F = FI }
+
+  object FunctorLawsNoSyntax {
+    def apply[F[_]](implicit FI: Functor[F]): FunctorLawsNoSyntax[F] =
+      new FunctorLawsNoSyntax[F] { def F = FI }
   }
 
   object FunctorInstances {

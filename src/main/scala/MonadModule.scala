@@ -44,7 +44,7 @@ object MonadModule {
       ma => f => g => (ma >>= f >>= g) == (ma >>= (f(_) >>= g))
   }
   
-  sealed trait MonadLawsNoInfix[F[_]] {
+  sealed trait MonadLawsNoSyntax[F[_]] {
 
     implicit def F: Monad[F]
 
@@ -53,19 +53,19 @@ object MonadModule {
 
     def rightIdentity[A]: F[A] => Boolean =
       ma => F.bind(ma) { a => F.`return`(a) } == ma
-    
+
     def associativity[A, B, C]: F[A] => (A => F[B]) => (B => F[C]) => Boolean =
       ma => f => g => F.bind(F.bind(ma){ f }){ g } == F.bind(ma){ a => F.bind(f(a)){ g } }
   }
-  
+
   object MonadLaws {
     def apply[F[_]](implicit FI: Monad[F]): MonadLaws[F] =
       new MonadLaws[F] { def F = FI }
   }
 
-  object MonadLawsNoInfix {
-    def apply[F[_]](implicit FI: Monad[F]): MonadLawsNoInfix[F] =
-      new MonadLawsNoInfix[F] { def F = FI }
+  object MonadLawsNoSyntax {
+    def apply[F[_]](implicit FI: Monad[F]): MonadLawsNoSyntax[F] =
+      new MonadLawsNoSyntax[F] { def F = FI }
   }
 
   object MonadInstances {

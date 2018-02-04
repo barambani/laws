@@ -10,7 +10,7 @@ import Algebra.Show._
 import MonadModule.MonadInstances._
 import MonadModule.Monad
 import MonadModule.MonadLaws
-import MonadModule.MonadLawsNoInfix
+import MonadModule.MonadLawsNoSyntax
 import ArbitraryImplicits._
 
 sealed abstract class MonadLawsCheck[F[_] : Monad, A, B, C](name: String)(
@@ -22,8 +22,8 @@ sealed abstract class MonadLawsCheck[F[_] : Monad, A, B, C](name: String)(
     BFC: Arbitrary[B => F[C]]
 ) extends Properties(s"$name Monad Laws Check") {
 
-  val laws        = MonadLaws[F]
-  val lawsNoInfix = MonadLawsNoInfix[F]
+  val laws          = MonadLaws[F]
+  val lawsNoSyntax  = MonadLawsNoSyntax[F]
 
   property(" Left identity") = forAll {
     (a: A, f: A => F[A]) => laws.leftIdentity(a)(f)
@@ -38,17 +38,17 @@ sealed abstract class MonadLawsCheck[F[_] : Monad, A, B, C](name: String)(
       laws.associativity(ma)(f)(g)
   }
 
-  property(" Left identity No Infix") = forAll {
-    (a: A, f: A => F[A]) => lawsNoInfix.leftIdentity(a)(f)
+  property(" Left identity No Syntax") = forAll {
+    (a: A, f: A => F[A]) => lawsNoSyntax.leftIdentity(a)(f)
   }
 
-  property(" Right identity No Infix") = forAll {
-    (ma: F[A]) => lawsNoInfix.rightIdentity(ma)
+  property(" Right identity No Syntax") = forAll {
+    (ma: F[A]) => lawsNoSyntax.rightIdentity(ma)
   }
 
-  property(" Associativity No Infix") = forAll {
+  property(" Associativity No Syntax") = forAll {
     (ma: F[A], f: A => F[B], g: B => F[C]) => 
-      lawsNoInfix.associativity(ma)(f)(g)
+      lawsNoSyntax.associativity(ma)(f)(g)
   }
 }
 

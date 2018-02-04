@@ -11,7 +11,7 @@ import Algebra.{Symbol, Box, Show}
 import Algebra.Show._
 import FunctorModule.Functor
 import FunctorModule.FunctorLaws
-import FunctorModule.FunctorLawsNoInfix
+import FunctorModule.FunctorLawsNoSyntax
 import FunctorModule.FunctorInstances._
 import ArbitraryImplicits._
 
@@ -22,8 +22,8 @@ sealed abstract class FunctorLawsCheck[F[_] : Functor, A, B](name: String)(
     ABB: Arbitrary[B => Boolean]
 ) extends Properties(s"$name Functor Laws Check") {
 
-  val laws        = FunctorLaws[F]
-  val lawsNoInfix = FunctorLawsNoInfix[F]
+  val laws          = FunctorLaws[F]
+  val lawsNoSyntax  = FunctorLawsNoSyntax[F]
 
   property(" Functor's Map Preserves Identity") = forAll {
     (fa: F[A]) => laws.mapPreservesIdentity(fa)
@@ -34,13 +34,13 @@ sealed abstract class FunctorLawsCheck[F[_] : Functor, A, B](name: String)(
       laws.mapPreservesComposition(fa)(f)(g)
   }
 
-  property(" Functor's Map Preserves Identity No Infix") = forAll {
-    (fa: F[A]) => lawsNoInfix.mapPreservesIdentity(fa)
+  property(" Functor's Map Preserves Identity No Syntax") = forAll {
+    (fa: F[A]) => lawsNoSyntax.mapPreservesIdentity(fa)
   }
 
-  property(" Functor's Map Preserves Composition No Infix") = forAll {
+  property(" Functor's Map Preserves Composition No Syntax") = forAll {
     (fa: F[A], f: A => B, g: B => Boolean) => 
-      lawsNoInfix.mapPreservesComposition(fa)(f)(g)
+      lawsNoSyntax.mapPreservesComposition(fa)(f)(g)
   }
 }
 

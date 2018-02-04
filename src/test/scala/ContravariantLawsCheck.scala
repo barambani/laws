@@ -6,7 +6,7 @@ import Algebra.Func
 import Algebra.Tree
 import ArbitraryImplicits._
 import ContravariantModule.ContravariantLaws
-import ContravariantModule.ContravariantLawsNoInfix
+import ContravariantModule.ContravariantLawsNoSyntax
 import ContravariantModule.Contravariant
 import ContravariantModule.ContravariantInstances._
 import org.scalacheck._
@@ -20,7 +20,7 @@ sealed abstract class ContravariantLawsCheck[F[_] : Contravariant, A, B, C](name
 ) extends Properties(s"$name Contravariant Functor Laws Check") {
 
   val laws          = ContravariantLaws[F]
-  val lawsNoInfix   = ContravariantLawsNoInfix[F]
+  val lawsNoSyntax  = ContravariantLawsNoSyntax[F]
 
   property(" Contravariant's Contramap Preserves Identity") = forAll {
     (fa: F[A]) => laws.contramapPreservesIdentity(fa)
@@ -30,12 +30,12 @@ sealed abstract class ContravariantLawsCheck[F[_] : Contravariant, A, B, C](name
     (fa: F[A], f: C => B, g: B => A) => laws.contramapPreservesComposition(fa)(f)(g)
   }
 
-  property(" Contravariant's Contramap Preserves Identity (No Infix)") = forAll {
-    (fa: F[A]) => lawsNoInfix.contramapPreservesIdentity(fa)
+  property(" Contravariant's Contramap Preserves Identity (No Syntax)") = forAll {
+    (fa: F[A]) => lawsNoSyntax.contramapPreservesIdentity(fa)
   }
 
-  property(" Contravariant's Contramap Preserves Composition (No Infix)") = forAll {
-    (fa: F[A], f: C => B, g: B => A) => lawsNoInfix.contramapPreservesComposition(fa)(f)(g)
+  property(" Contravariant's Contramap Preserves Composition (No Syntax)") = forAll {
+    (fa: F[A], f: C => B, g: B => A) => lawsNoSyntax.contramapPreservesComposition(fa)(f)(g)
   }
 }
 

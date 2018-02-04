@@ -6,7 +6,7 @@ import org.scalacheck.Prop.forAll
 
 import ApplicativeModule.Applicative
 import ApplicativeModule.ApplicativeLaws
-import ApplicativeModule.ApplicativeLawsNoInfix
+import ApplicativeModule.ApplicativeLawsNoSyntax
 import ApplicativeModule.ApplicativeInstances._
 import Algebra.Id
 import Algebra.{Symbol, Show, Box}
@@ -24,8 +24,8 @@ sealed abstract class ApplicativeLawsCheck[F[_] : Applicative, A, B](name: Strin
     AFF: Arbitrary[F[A => B]]
 ) extends Properties(s"$name Applicative Laws Check") {
 
-  val laws        = ApplicativeLaws[F]
-  val lawsNoInfix = ApplicativeLawsNoInfix[F]
+  val laws          = ApplicativeLaws[F]
+  val lawsNoSyntax  = ApplicativeLawsNoSyntax[F]
 
   property(" Applicative Identity") = forAll {
     (fa: F[A]) => laws.applicativeIdentity(fa)
@@ -42,21 +42,21 @@ sealed abstract class ApplicativeLawsCheck[F[_] : Applicative, A, B](name: Strin
   property(" Applicative Map") = forAll {
     (fa: F[A], f: A => B) => laws.applicativeMap(fa)(f)
   }
-  
-  property(" Applicative Identity No Infix") = forAll {
-    (fa: F[A]) => lawsNoInfix.applicativeIdentity(fa)
+
+  property(" Applicative Identity No Syntax") = forAll {
+    (fa: F[A]) => lawsNoSyntax.applicativeIdentity(fa)
   }
 
-  property(" Applicative Homomorphism No Infix") = forAll {
-    (a: A, f: A => B) => lawsNoInfix.homomorphism(a)(f)
+  property(" Applicative Homomorphism No Syntax") = forAll {
+    (a: A, f: A => B) => lawsNoSyntax.homomorphism(a)(f)
   }
 
-  property(" Applicative Interchange No Infix") = forAll {
-    (a: A, ff: F[A => B]) => lawsNoInfix.interchange(a)(ff)
+  property(" Applicative Interchange No Syntax") = forAll {
+    (a: A, ff: F[A => B]) => lawsNoSyntax.interchange(a)(ff)
   }
 
-  property(" Applicative Map No Infix") = forAll {
-    (fa: F[A], f: A => B) => lawsNoInfix.applicativeMap(fa)(f)
+  property(" Applicative Map No Syntax") = forAll {
+    (fa: F[A], f: A => B) => lawsNoSyntax.applicativeMap(fa)(f)
   }
 }
 

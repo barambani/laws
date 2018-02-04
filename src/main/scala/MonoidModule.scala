@@ -1,6 +1,6 @@
 import SemigroupModule.Semigroup
 import SemigroupModule.SemigroupLaws
-import SemigroupModule.SemigroupLawsNoInfix
+import SemigroupModule.SemigroupLawsNoSyntax
 import SemigroupModule.SemigroupSyntax
 import SemigroupModule.SemigroupInstances._
 
@@ -29,7 +29,7 @@ object MonoidModule {
       (a <> F.empty) == a && (F.empty <> a) == a
   }
 
-  sealed trait MonoidLawsNoInfix[A] extends SemigroupLawsNoInfix[A] {
+  sealed trait MonoidLawsNoSyntax[A] extends SemigroupLawsNoSyntax[A] {
 
     implicit def F: Monoid[A]
 
@@ -42,9 +42,9 @@ object MonoidModule {
       new MonoidLaws[A] { def F = FI }
   }
 
-  object MonoidLawsNoInfix {
-    def apply[A](implicit FI: Monoid[A]): MonoidLawsNoInfix[A] =
-      new MonoidLawsNoInfix[A] { def F = FI }
+  object MonoidLawsNoSyntax {
+    def apply[A](implicit FI: Monoid[A]): MonoidLawsNoSyntax[A] =
+      new MonoidLawsNoSyntax[A] { def F = FI }
   }
 
   object MonoidInstances {

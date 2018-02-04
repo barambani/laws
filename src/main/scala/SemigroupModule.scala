@@ -27,7 +27,7 @@ object SemigroupModule {
       (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
   }
 
-  trait SemigroupLawsNoInfix[A] {
+  trait SemigroupLawsNoSyntax[A] {
 
     implicit def F: Semigroup[A]
 
@@ -39,10 +39,10 @@ object SemigroupModule {
     def apply[A](implicit FI: Semigroup[A]): SemigroupLaws[A] =
       new SemigroupLaws[A] { def F = FI }
   }
-  
-  object SemigroupLawsNoInfix {
-    def apply[A](implicit FI: Semigroup[A]): SemigroupLawsNoInfix[A] =
-      new SemigroupLawsNoInfix[A] { def F = FI }
+
+  object SemigroupLawsNoSyntax {
+    def apply[A](implicit FI: Semigroup[A]): SemigroupLawsNoSyntax[A] =
+      new SemigroupLawsNoSyntax[A] { def F = FI }
   }
 
   object SemigroupInstances {

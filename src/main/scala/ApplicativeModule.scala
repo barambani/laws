@@ -56,8 +56,8 @@ object ApplicativeModule {
       fa => f => (fa map f) == (fa <*> F.pure(f))
   }
 
-  sealed trait ApplicativeLawsNoInfix[F[_]] {
-  
+  sealed trait ApplicativeLawsNoSyntax[F[_]] {
+
     implicit def F: Applicative[F]
 
     def applicativeIdentity[A]: F[A] => Boolean =
@@ -78,9 +78,9 @@ object ApplicativeModule {
       new ApplicativeLaws[F] { def F = FI }
   }
 
-  object ApplicativeLawsNoInfix {
-    def apply[F[_]](implicit FI: Applicative[F]): ApplicativeLawsNoInfix[F] =
-      new ApplicativeLawsNoInfix[F] { def F = FI }
+  object ApplicativeLawsNoSyntax {
+    def apply[F[_]](implicit FI: Applicative[F]): ApplicativeLawsNoSyntax[F] =
+      new ApplicativeLawsNoSyntax[F] { def F = FI }
   }
 
   object ApplicativeInstances {

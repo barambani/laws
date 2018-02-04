@@ -4,7 +4,7 @@ import org.scalacheck.Prop.forAll
 
 import SemigroupModule.Semigroup
 import SemigroupModule.SemigroupLaws
-import SemigroupModule.SemigroupLawsNoInfix
+import SemigroupModule.SemigroupLawsNoSyntax
 import SemigroupModule.SemigroupInstances._
 
 sealed abstract class SemigroupLawsCheck[A : Semigroup](name: String)(
@@ -12,15 +12,15 @@ sealed abstract class SemigroupLawsCheck[A : Semigroup](name: String)(
     AA: Arbitrary[A]
 ) extends Properties(s"$name Semigroup Laws Check") {
 
-  val laws        = SemigroupLaws[A]
-  val lawsNoInfix = SemigroupLawsNoInfix[A]
+  val laws          = SemigroupLaws[A]
+  val lawsNoSyntax  = SemigroupLawsNoSyntax[A]
 
   property(" Combine Associativity") = forAll {
     (a1: A, a2: A, a3: A) => laws.combineAssociativity(a1, a2, a3)
   }
 
-  property(" Combine Associativity No Infix") = forAll {
-    (a1: A, a2: A, a3: A) => lawsNoInfix.combineAssociativity(a1, a2, a3)
+  property(" Combine Associativity No Syntax") = forAll {
+    (a1: A, a2: A, a3: A) => lawsNoSyntax.combineAssociativity(a1, a2, a3)
   }
 }
 
