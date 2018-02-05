@@ -132,7 +132,7 @@ val fa: Show[A] = fb contramap f
 val anA: A = ???
 fa.show(anA) // Works fine
 ```
-The *contravariant functor type class* is defined as
+The *contravariant functor type class* can be defined as
 ```scala
 trait Contravariant[F[_]] {
   def contramap[A, B]: F[B] => (A => B) => F[A]
