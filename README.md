@@ -107,7 +107,7 @@ implicit def functionFunctor[X]: Functor[Func[X, ?]] =
       fa => f => Func[X, B](f compose fa.apply)
   }
 ```
-We can see that it allows to transform the **output** type inside the context *Function1* through its `map`. Reasoning along the same line, we could argue that we might want to adapt also the **input** type of *Function1*, but clearly `map` cannot do that. The types don't align. This is exactly what a *contravariant functor* is designed to resolve with its `contramap`. Let's have a look at the instance for *Function1*
+We can see that it allows to transform the **output** type inside the context *Function1* composing an `A => B` to the function application `fa.apply`. Reasoning along the same line, we could argue that we might also want to adapt the **input** type of another *Function1* where we fix the output and that can be defined as `Func[?, Y]`. In this case we cannot `map` the input type otherwise we wouldn't be able to apply the *Function1* anymore. `map` clearly cannot do that. The types don't align. What we can do instead, is to prepend a *morphism* to *Function1* that would give us exactly the type we need in **input** still remaining inside the context *Function1*. This is exactly what a *contravariant functor* is designed to do with its `contramap`. Let's have a look at a possible instance
 ```scala
 implicit def funcContravariant[Y]: Contravariant[Func[?, Y]] =
   new Contravariant[Func[?, Y]] {
@@ -121,7 +121,7 @@ trait Show[B] {
   def show: B => String
 }
 ```
-that converts to string a type `B`. A *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because we implemented a valid `contramap` for `Show` that can generate a `Show[A]` given an `A => B` withiout even providing the implementation for `show: A => String`. All we have to do is use the `contramap` function like in the example below making sure all the types align.
+that converts to string a type `B`. A *contravariant functor* for `Show` can adapt the `show` function to accept any other type in **input** as long as we can provide a *morphism* from this other type to `B`. It can do that because we implemented a valid `contramap` for `Show` that can generate a `Show[A]` given an `A => B` withiout even providing the implementation for `show: A => String`. All we have to do is use the `contramap` function like in the example below making sure all the types are in line.
 ```scala
 val fb: Show[B] = Show[B]
 val f: A => B = ???
