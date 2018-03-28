@@ -88,7 +88,7 @@ trait Functor[F[_]] {
     f => fa => map(fa)(f)
 }
 ```
-Notice that another function `lift[A, B]` can be derived from `map` (`lift` is actually what's called `fmap` in Haskell). It better describes another capability that can be provided by a *functor*. It allows to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* a function on *types* to a function on *type constructor* `F[_]`.
+Notice that another function `lift[A, B]` can be derived from `map` (`lift` is actually what's called `fmap` in Haskell). It better describes another capability that can be provided by a *functor*. It allows, in fact, to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* a function on *types* to a function on *type constructors* `F[_]`.
 
 For an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation must preserve the identity morphism for every `F[A]` in `A` and the composition of morphisms for every `F[A]` in `A` and every `f` from `A` => `B` and `g` from `B` => `C`
 ```scala
