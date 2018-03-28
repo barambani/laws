@@ -1,19 +1,12 @@
-import scala.language.higherKinds
-
-import org.scalacheck._
-import org.scalacheck.Properties
-import org.scalacheck.Prop.forAll
-
-import Algebra.Tree
-import Algebra.Func
-import Algebra.Id
-import Algebra.{Symbol, Box, Show}
 import Algebra.Show._
-import FunctorModule.Functor
-import FunctorModule.FunctorLaws
-import FunctorModule.FunctorLawsNoSyntax
-import FunctorModule.FunctorInstances._
+import Algebra.{->, Box, Id, Show, Symbol, Tree}
 import ArbitraryImplicits._
+import FunctorModule.FunctorInstances._
+import FunctorModule.{Functor, FunctorLaws, FunctorLawsNoSyntax}
+import org.scalacheck.Prop.forAll
+import org.scalacheck.{Properties, _}
+
+import scala.language.higherKinds
 
 sealed abstract class FunctorLawsCheck[F[_] : Functor, A, B](name: String)(
   implicit
@@ -48,6 +41,6 @@ object IdFunctorLawsCheck             extends FunctorLawsCheck[Id, String, Int](
 object ListFunctorLawsCheck           extends FunctorLawsCheck[List, Show[Symbol], Box[String]]("List")
 object OptionFunctorLawsCheck         extends FunctorLawsCheck[Option, Tree[Box[Int]], Boolean]("Option")
 object EitherFunctorLawsCheck         extends FunctorLawsCheck[Either[String, ?], Box[Int], Symbol]("Either")
-object IntFunctionFunctorLawsCheck    extends FunctorLawsCheck[Func[Int, ?], Box[String], Tree[Int]]("Function From Int")
-object StringFunctionFunctorLawsCheck extends FunctorLawsCheck[Func[String, ?], Tree[String], Box[Int]]("Function From String")
+object IntFunctionFunctorLawsCheck    extends FunctorLawsCheck[Int -> ?, Box[String], Tree[Int]]("Function From Int")
+object StringFunctionFunctorLawsCheck extends FunctorLawsCheck[String -> ?, Tree[String], Box[Int]]("Function From String")
 object TreeFunctorLawsCheck           extends FunctorLawsCheck[Tree, String, Box[Box[Int]]]("Tree")

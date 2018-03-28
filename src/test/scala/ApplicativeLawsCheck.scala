@@ -1,20 +1,13 @@
-import scala.language.higherKinds
-
-import org.scalacheck._
-import org.scalacheck.Properties
-import org.scalacheck.Prop.forAll
-
-import ApplicativeModule.Applicative
-import ApplicativeModule.ApplicativeLaws
-import ApplicativeModule.ApplicativeLawsNoSyntax
-import ApplicativeModule.ApplicativeInstances._
-import Algebra.Id
-import Algebra.{Symbol, Show, Box}
 import Algebra.Show._
-import Algebra.Tree
-import Algebra.Func
+import Algebra.{->, Box, Id, Show, Symbol, Tree}
+import ApplicativeModule.ApplicativeInstances._
+import ApplicativeModule.{Applicative, ApplicativeLaws, ApplicativeLawsNoSyntax}
 import ArbitraryImplicits._
 import SemigroupModule.SemigroupInstances._
+import org.scalacheck.Prop.forAll
+import org.scalacheck.{Properties, _}
+
+import scala.language.higherKinds
 
 sealed abstract class ApplicativeLawsCheck[F[_] : Applicative, A, B](name: String)(
   implicit
@@ -65,6 +58,6 @@ object ListApplicativeLawsCheck           extends ApplicativeLawsCheck[List, Int
 object OptionApplicativeLawsCheck         extends ApplicativeLawsCheck[Option, String, Show[Box[Int]]]("Option of string and show of box")
 object EitherApplicativeLawsCheck         extends ApplicativeLawsCheck[Either[String, ?], Symbol, Show[Box[Symbol]]]("Either of symbol and show of box")
 object Either2ApplicativeLawsCheck        extends ApplicativeLawsCheck[Either[List[String], ?], Tree[Int], Show[Box[Symbol]]]("Either 2 of symbol and show of box")
-object IntFunctionApplicativeLawsCheck    extends ApplicativeLawsCheck[Func[Int, ?], Tree[String], Boolean]("Function from int to tree and boolean")
-object StringFunctionApplicativeLawsCheck extends ApplicativeLawsCheck[Func[String, ?], Box[Int], Box[String]]("Function from string to box of int and string")
+object IntFunctionApplicativeLawsCheck    extends ApplicativeLawsCheck[Int -> ?, Tree[String], Boolean]("Function from int to tree and boolean")
+object StringFunctionApplicativeLawsCheck extends ApplicativeLawsCheck[String -> ?, Box[Int], Box[String]]("Function from string to box of int and string")
 object TreeApplicativeLawsCheck           extends ApplicativeLawsCheck[Tree, Symbol, Box[Boolean]]("Tree of symbol and box of boolean")

@@ -1,14 +1,15 @@
 object Algebra {
 
   type Id[A] = A
+  type ->[A, B] = Func[A, B]
 
   final case class Func[A, +R](private val f: A => R)
-    extends Function1[A, R] {  
+    extends ((A) => R) {
       override def apply(a: A): R = f(a)
       override def equals(other: Any): Boolean = 
         other match {
-          case _: Func[A, R] => true
-          case _ => false
+          case _: (A -> R)  => true
+          case _            => false
         }
     }
 

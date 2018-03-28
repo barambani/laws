@@ -1,22 +1,13 @@
-import org.scalacheck.Arbitrary
-import org.scalacheck.Cogen
-import org.scalacheck.Gen
-
+import Algebra.{->, Box, Branch, Codec, Func, Leaf, Show, Symbol, Tree}
+import org.scalacheck.{Arbitrary, Cogen, Gen}
 import shapeless.Lazy
-
-import Algebra.Func
-import Algebra.{Tree, Branch, Leaf}
-import Algebra.Show
-import Algebra.Box
-import Algebra.Symbol
-import Algebra.Codec
 
 object ArbitraryImplicits {
 
   implicit def funcToArb[X, R](
     implicit 
       AX: Arbitrary[X],
-      AR: Arbitrary[R]): Arbitrary[Func[X, R]] =
+      AR: Arbitrary[R]): Arbitrary[X -> R] =
     Arbitrary {
       for {
         x <- AX.arbitrary

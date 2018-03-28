@@ -3,9 +3,7 @@ import CartesianModule.Cartesian
 import SemigroupModule.Semigroup
 import SemigroupModule.SemigroupSyntax
 import FunctorModule.FunctorSyntax
-import Algebra.Func
-import Algebra.{Leaf, Branch, Tree}
-import Algebra.Id
+import Algebra._
 
 import scala.language.higherKinds
 
@@ -123,13 +121,13 @@ object ApplicativeModule {
           }
       }
 
-    implicit def functionApplicative[X]: Applicative[Func[X, ?]] =
-      new Applicative[Func[X, ?]] {
-        def pure[A]: A => Func[X, A] =
+    implicit def functionApplicative[X]: Applicative[X -> ?] =
+      new Applicative[X -> ?] {
+        def pure[A]: A => (X -> A) =
           a => Func(_ => a)
 
-        def ap[A, B]: Func[X, A] => Func[X, A => B] => Func[X, B] =
-          fa => ff => Func[X, B]{ x => ff.apply(x)(fa.apply(x)) }
+        def ap[A, B]: (X -> A) => (X -> (A => B)) => (X -> B) =
+          fa => ff => Func(x => ff(x)(fa(x)))
       }
 
     implicit val treeApplicative: Applicative[Tree] =
