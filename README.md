@@ -79,7 +79,7 @@ sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/MonoidModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/MonoidLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Monoid) ]
 
 ### Covariant Functor (Functor)
-A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. More specifically, given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure as `fa`, through the application of a *function* `f: a -> b` to every element in `fa`. It's worth noting that this is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case *first order kinded types* or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala we can represent these concepts as
+A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. More specifically, given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure as `fa`, through the application of a *function* `f: a -> b` to every element in `fa`. It's worth noting that this is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case *first order kinded types* or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala we can represent it as
 ```scala
 trait Functor[F[_]] {
   def map[A, B]: F[A] => (A => B) => F[B]
@@ -88,7 +88,7 @@ trait Functor[F[_]] {
     f => fa => map(fa)(f)
 }
 ```
-Notice that looking at the `lift[A, B]` function (`fmap` in Haskell) we can see another important capability that the *functor* has. It allows, in fact, to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* a function into the context `F[_]`.
+Notice that another function `lift[A, B]` can be derived from `map` (`lift` is actually what's called `fmap` in Haskell). It better describes another capability that can be provided by a *functor*. It allows to create a morphism from a function from `A` to `B` to a function from `F[A]` to `F[B]`, that is the same as saying that it allows to *lift* a function on *types* to a function on *type constructor* `F[_]`.
 
 For an instance of `Functor[F[_]]` to be a valid *functor*, the `map` operation must preserve the identity morphism for every `F[A]` in `A` and the composition of morphisms for every `F[A]` in `A` and every `f` from `A` => `B` and `g` from `B` => `C`
 ```scala
