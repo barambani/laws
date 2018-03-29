@@ -89,8 +89,7 @@ object MonadModule {
 
     implicit val optionMonad: Monad[Option] = new Monad[Option] {
       
-      def `return`[A]: A => Option[A] = 
-        Some(_)
+      def `return`[A]: A => Option[A] = Some(_)
       
       def bind[A, B]: Option[A] => (A => Option[B]) => Option[B] = 
         ma => f => ma flatMap f
@@ -98,8 +97,7 @@ object MonadModule {
 
     implicit def eitherMonad[E]: Monad[Either[E, ?]] = new Monad[Either[E, ?]] {
     
-      def `return`[A]: A => Either[E, A] =
-        Right(_)
+      def `return`[A]: A => Either[E, A] = Right(_)
 
       def bind[A, B]: Either[E, A] => (A => Either[E, B]) => Either[E, B] =
         fa => f => fa flatMap f
@@ -107,8 +105,7 @@ object MonadModule {
 
     implicit val treeMonad: Monad[Tree] = new Monad[Tree] {
     
-      def `return`[A]: A => Tree[A] =
-        Leaf.apply
+      def `return`[A]: A => Tree[A] = Leaf[A]
 
       def bind[A, B]: Tree[A] => (A => Tree[B]) => Tree[B] =
         fa => f => fa match {
@@ -124,7 +121,7 @@ object MonadModule {
           a => Func(_ => a)
 
         def bind[A, B]: X -> A => (A => (X -> B)) => X -> B =
-          fa => f => Func[X, B](x => (f compose fa.apply)(x)(x))
+          fa => f => Func(x => (f compose fa)(x)(x))
       }
   }
 }

@@ -33,7 +33,7 @@ object ArbitraryImplicits {
     implicit 
       AR: Arbitrary[A]): Arbitrary[Leaf[A]] =
     Arbitrary {
-      AR.arbitrary map Leaf.apply
+      AR.arbitrary map Leaf[A]
     }
 
   implicit def treeArb[A](
@@ -95,7 +95,7 @@ object ArbitraryImplicits {
     }
 
   implicit def symbol(implicit AS: Arbitrary[String]): Arbitrary[Symbol] =
-    Arbitrary { AS.arbitrary map Symbol.apply }
+    Arbitrary { AS.arbitrary map Symbol }
 
   implicit def symbolCodec(
     implicit

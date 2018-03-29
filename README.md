@@ -104,7 +104,7 @@ To understand what a *contravariant functor* is let's focus on the adaptive sema
 implicit def functionFunctor[X]: Functor[X -> ?] =
   new Functor[X -> ?] {
     def map[A, B]: (X -> A) => (A => B) => (X -> B) =
-      fa => f => Func(f compose fa.apply)
+      fa => f => Func(f compose fa)
   }
 ```
 We can see that it allows to transform the **output** type inside the context *Function1* composing an `A => B` to the function application `fa.apply`. Reasoning along the same line, we could argue that we might also want to adapt the **input** type of another *Function1* where we fix the output and that can be defined as `? -> Y`. In this case we cannot `map` the input type otherwise we wouldn't be able to apply the *Function1* anymore. `map` clearly cannot do that. The types don't align. What we can do instead, is to prepend a *morphism* to *Function1* that would give us exactly the type we need in **input** still remaining inside the context *Function1*. This is exactly what a *contravariant functor* is designed to do with its `contramap`. Let's have a look at a possible instance
@@ -112,7 +112,7 @@ We can see that it allows to transform the **output** type inside the context *F
 implicit def functionContravariant[Y]: Contravariant[? -> Y] =
   new Contravariant[? -> Y] {
     def contramap[A, B]: (B -> Y) => (A => B) => (A -> Y) =
-      fb => f => Func(fb.apply _ compose f)
+      fb => f => Func(fb compose f)
   }
 ```
 The reader might observe that satisfying just this very specific need wouldn't be worth the troubles of an abstraction formalization and that's an absolutely reasonable objection. *Contravariant functor* actually doesn't work only in this particular scenario. On the contrary its peculiarity is that it generalizes this behavior and applies the adaptation to any other context that models a form of processing. That is the same as saying that we can have this feature for any *higher order type operator* for which we can define a `contramap[A, B]`. As an example, let's consider a `Show[B]` abstraction defined as

@@ -75,7 +75,7 @@ object FunctorModule {
     implicit def functionFunctor[X]: Functor[X -> ?] =
       new Functor[X -> ?] {
         def map[A, B]: (X -> A) => (A => B) => (X -> B) =
-          fa => f => Func(f compose fa.apply)
+          fa => f => Func(f compose fa)
       }
 
     implicit val treeFunctor: Functor[Tree] =
@@ -83,7 +83,7 @@ object FunctorModule {
         def map[A, B]: Tree[A] => (A => B) => Tree[B] =
           fa => f => fa match {
             case Branch(l, r) => Branch(map(l)(f), map(r)(f))
-            case Leaf(v) => (Leaf.apply[B] _ compose f)(v)
+            case Leaf(v) => (Leaf[B] _ compose f)(v)
           }
       }
 
