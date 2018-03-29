@@ -1,9 +1,7 @@
-import FunctorModule.Functor
-import CartesianModule.Cartesian
-import SemigroupModule.Semigroup
-import SemigroupModule.SemigroupSyntax
-import FunctorModule.FunctorSyntax
 import Algebra._
+import CartesianModule.Cartesian
+import FunctorModule.{Functor, FunctorSyntax}
+import SemigroupModule.{Semigroup, SemigroupSyntax}
 
 import scala.language.higherKinds
 
