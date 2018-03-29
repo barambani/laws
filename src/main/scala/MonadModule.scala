@@ -1,5 +1,4 @@
-import Algebra.Id
-import Algebra.{Tree, Leaf, Branch}
+import Algebra._
 import FunctorModule.Functor
 import ApplicativeModule.Applicative
 
@@ -117,5 +116,15 @@ object MonadModule {
           case Leaf(a)      => f(a)
         }
     }
+
+    implicit def functionApplicative[X]: Monad[X -> ?] =
+      new Monad[X -> ?] {
+
+        def `return`[A]: A => X -> A =
+          a => Func(_ => a)
+
+        def bind[A, B]: X -> A => (A => (X -> B)) => X -> B =
+          fa => f => Func[X, B](x => (f compose fa.apply)(x)(x))
+      }
   }
 }

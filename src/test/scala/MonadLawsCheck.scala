@@ -1,17 +1,12 @@
-import scala.language.higherKinds
-
-import org.scalacheck._
-import org.scalacheck.Properties
-import org.scalacheck.Prop.forAll
-
-import Algebra.Id
-import Algebra.{Tree, Box, Symbol, Show}
 import Algebra.Show._
-import MonadModule.MonadInstances._
-import MonadModule.Monad
-import MonadModule.MonadLaws
-import MonadModule.MonadLawsNoSyntax
+import Algebra.{->, Box, Id, Show, Symbol, Tree}
 import ArbitraryImplicits._
+import MonadModule.MonadInstances._
+import MonadModule.{Monad, MonadLaws, MonadLawsNoSyntax}
+import org.scalacheck.Prop.forAll
+import org.scalacheck.{Properties, _}
+
+import scala.language.higherKinds
 
 sealed abstract class MonadLawsCheck[F[_] : Monad, A, B, C](name: String)(
   implicit
@@ -52,8 +47,10 @@ sealed abstract class MonadLawsCheck[F[_] : Monad, A, B, C](name: String)(
   }
 }
 
-object IdMonadLawsCheck       extends MonadLawsCheck[Id, Box[Int], String, Symbol]("Id")
-object ListMonadLawsCheck     extends MonadLawsCheck[List, String, List[Int], Box[Int]]("List")
-object OptionMonadLawsCheck   extends MonadLawsCheck[Option, Boolean, Tree[Boolean], Symbol]("Option")
-object EitherMonadLawsCheck   extends MonadLawsCheck[Either[String, ?], Symbol, Tree[String], Symbol]("Either")
-object TreeMonadLawsCheck     extends MonadLawsCheck[Tree, Box[Int], Symbol, Show[Box[String]]]("Tree")
+object IdMonadLawsCheck             extends MonadLawsCheck[Id, Box[Int], String, Symbol]("Id")
+object ListMonadLawsCheck           extends MonadLawsCheck[List, String, List[Int], Box[Int]]("List")
+object OptionMonadLawsCheck         extends MonadLawsCheck[Option, Boolean, Tree[Boolean], Symbol]("Option")
+object EitherMonadLawsCheck         extends MonadLawsCheck[Either[String, ?], Symbol, Tree[String], Symbol]("Either")
+object TreeMonadLawsCheck           extends MonadLawsCheck[Tree, Box[Int], Symbol, Show[Box[String]]]("Tree")
+object IntFunctionMonadLawsCheck    extends MonadLawsCheck[Int -> ?, Tree[String], Boolean, Symbol]("Function from int to tree and boolean")
+object StringFunctionMonadLawsCheck extends MonadLawsCheck[String -> ?, Box[Int], Box[String], Tree[String]]("Function from string to box of int and string")
