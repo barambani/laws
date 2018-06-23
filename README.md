@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/barambani/laws/branch/master/graph/badge.svg)](https://codecov.io/gh/barambani/laws)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/barambani/laws/blob/master/LICENSE)
 
-Laws is a set of sample implementations of the fundamental functional programming abstractions, with the sole purpouse of demonstrating the definition and the property-based verification of their underlying algebraic structure's laws. They are implemented here as type classes for types of kind `*` and for higher order type operators of kind `* -> *` and, given the exemplificative nature of this work, they are strictly limited to the most basic, but still most important, ones. To notice that the implementations in this repository are not meant to be used in production code and, by no means, are intended as a state of the art in library design and modules composition. In more than one case, on the contrary, the semantic cohesion, the ease of understanding and the clarity, as reduction of boilerplate code, have been preferred to optimization and usability. For real life collections of production-ready functional programming abstractions, the suggestion is to have a look at libraries like [Scalaz](https://github.com/scalaz/scalaz) or [Cats](https://github.com/typelevel/cats).
+Laws is a set of sample implementations of the fundamental functional programming abstractions, with the sole purpouse of showing the definition and the property-based verification of their algebraic structure's laws. They are implemented here as type classes for types of kind `*` and for higher order type operators of kind `* -> *` and, given the exemplificative nature of this work, they are strictly limited to the most basic, but still most important, ones. To notice that the implementations in this repository are not meant to be used in production code and, by no means, are intended as a state of the art in library design and modules composition. In more than one case, on the contrary, the semantic cohesion, the ease of understanding and the clarity, as reduction of boilerplate code, have been preferred to optimization and usability. For real life collections of production-ready functional programming abstractions, the suggestion is to have a look at libraries like [Scalaz](https://github.com/scalaz/scalaz) or [Cats](https://github.com/typelevel/cats).
 
 ## Structure
 Currently the project includes the following type classes
@@ -38,7 +38,7 @@ trait Semigroup[A] {
   def combine: (A, A) => A
 }
 ```
-For the *set* `A` to be a valid *semigroup* the `combine` operation has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
+For the *type* `A` to be a valid *semigroup* the `combine` operation has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
 ```scala
 (a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 
@@ -66,7 +66,7 @@ where, as per its own definition, it has to satisfy the identity law for every `
 ```scala
 (a: A) => (a <> empty) == a && (empty <> a) == a
 ```
-*Worth nothing that in the actual implementation of the law, we had to go through the implicit handle for the instance in use to access the `Monoid[A]` `empty` element. This is not present in the expression above just to keep the read more fluent*. The real implementation is in fact
+*Worth nothing that in the actual implementation of the law, we had to go through the implicit handle for the instance in use to access the `Monoid[A]` `empty` element. This is not present in the expression above just to keep the read more fluent*. The real implementation of the law is in fact
 ```scala
 sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 
@@ -79,7 +79,7 @@ sealed trait MonoidLaws[A] extends SemigroupLaws[A] {
 [ [Code](https://github.com/barambani/laws/blob/master/src/main/scala/MonoidModule.scala), [Laws Check](https://github.com/barambani/laws/blob/master/src/test/scala/MonoidLawsCheck.scala), [Reference](https://en.wikipedia.org/wiki/Monoid) ]
 
 ### Covariant Functor (Functor)
-A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. More specifically, given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure as `fa`, through the application of a *function* `f: a -> b` to every element in `fa`. It's worth noting that this is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type containers* (in this case *first order kinded types* or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala we can represent it as
+A *covariant functor* or *functor* is an abstract data type that has the capability for its vaules to be mapped over. More specifically, given a *functor* `fa` it's possible to obtain another *functor* `fb` with the same structure as `fa`, through the application of a *function* `f: a -> b` to every element in `fa`. It's worth noting that this is the first type class we meet that abstracts over an *higher order type operator* (or *type constructor*) and not over a *type*. This is because *functor* is an abstraction for *type constructor* (in this case *first order kinded types* or types of kind `* -> *`) and not for regural types (or types of kind `*`). In Scala we can represent it as
 ```scala
 trait Functor[F[_]] {
   def map[A, B]: F[A] => (A => B) => F[B]
