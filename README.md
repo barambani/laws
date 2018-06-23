@@ -38,7 +38,7 @@ trait Semigroup[A] {
   def combine: (A, A) => A
 }
 ```
-For the *type* `A` to be a valid *semigroup* the `combine` operation has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
+For the algebra (the *type* `A` and its operations) to be a valid *semigroup* `combine` has to abide by the associativity law for every `a1`, `a2` and `a3` in `A`
 ```scala
 (a1: A, a2: A, a3: A) => (a1 <> a2) <> a3 == a1 <> (a2 <> a3)
 
