@@ -3,7 +3,7 @@ import Dependencies._
 inThisBuild(Seq(
   scalaOrganization     := "org.typelevel",
   scalaVersion          := "2.12.4-bin-typelevel-4",
-  coverageMinimum       := 90,
+  coverageMinimum       := 85,
   coverageFailOnMinimum := true,
   libraryDependencies   ++= externalDependencies
 ))
