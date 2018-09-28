@@ -81,7 +81,7 @@ scalacOptions in Test ++= Seq("-Yrangepos")
 resolvers += Resolver.sonatypeRepo("releases")
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
-addCompilerPlugin("io.tryp" % "splain" % "0.3.2" cross CrossVersion.patch)
+addCompilerPlugin("io.tryp" % "splain" % "0.3.3" cross CrossVersion.patch)
 
 scalacOptions in (Test) ++= Seq (
   "-P:splain:implicits:true",
