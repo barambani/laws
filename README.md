@@ -5,8 +5,8 @@
 
 Laws is a set of sample implementations of the fundamental functional programming abstractions, with the sole purpouse of showing the definition and the property-based verification of their algebraic structure's laws. They are implemented here as type classes for types of kind `*` and for higher order type operators of kind `* -> *` and, given the exemplificative nature of this work, they are strictly limited to the most basic, but still most important, ones. To notice that the implementations in this repository are not meant to be used in production code and, by no means, are intended as a state of the art in library design and modules composition. In more than one case, on the contrary, the semantic cohesion, the ease of understanding and the clarity, as reduction of boilerplate code, have been preferred to optimization and usability. For real life collections of production-ready functional programming abstractions, the suggestion is to have a look at libraries like [Scalaz](https://github.com/scalaz/scalaz) or [Cats](https://github.com/typelevel/cats).
 
-## Structure
-Currently the project includes the following type classes
+## Code Structure
+Currently the project includes the following structures
 - [Semigroup](#semigroup)
 - [Monoid](#monoid)
 - [Covariant Functor (Functor)](#covariant-functor-functor)
@@ -18,19 +18,19 @@ Currently the project includes the following type classes
 
 (*) No laws abided by
 
-Each type class lives in its own **_Scala_** file called **_Module_** and every module provides
+Each structure lives in its own **_Scala_** file called **_Module_** and every module provides
 
 ```
-- the type class definition
+- the type definition
 - a set of instances
 - a syntax extension
-- a definition of the laws using syntax extensions
-- a definition of the laws using the type class functions
+- a definition of the laws using the syntax extensions
+- a definition of the laws using the structure's primitives (for quick comparison)
 ```
 
 An extra file with the supporting **_Algebra_** completes the project. The structure of the source code, as can be seen, is very linear and easy to navigate so, for further details, the best advise is to [look into the the code itself](https://github.com/barambani/laws/tree/master/src/main/scala).
 
-## Implementation and Laws
+## Structures
 ### Semigroup
 A *semigroup* consists of a *set* `A` (*type for us from now on*) and a binary operation `combine`. A possible way to represent it in Scala is
 ```scala
