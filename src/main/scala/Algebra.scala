@@ -8,8 +8,8 @@ object Algebra {
       override def apply(a: A): R = f(a)
       override def equals(other: Any): Boolean = 
         other match {
-          case _: (A -> R)  => true
-          case _            => false
+          case _: (A -> R) => true
+          case _           => false
         }
     }
 

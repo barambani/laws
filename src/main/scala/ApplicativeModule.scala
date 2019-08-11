@@ -3,8 +3,6 @@ import CartesianModule.Cartesian
 import FunctorModule.{Functor, FunctorSyntax}
 import SemigroupModule.{Semigroup, SemigroupSyntax}
 
-import scala.language.higherKinds
-
 object ApplicativeModule {
 
   trait Applicative[F[_]] extends Cartesian[F] with Functor[F] {

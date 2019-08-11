@@ -2,8 +2,6 @@ import Algebra._
 import FunctorModule.Functor
 import ApplicativeModule.Applicative
 
-import scala.language.higherKinds
-
 object MonadModule {
 
   trait Monad[F[_]] extends Applicative[F] with Functor[F] {
@@ -26,7 +24,9 @@ object MonadModule {
 
   implicit final class MonadSyntax[F[_] : Monad, A](fa: F[A]) {
     def >>=[B](f: A => F[B]): F[B] = 
-      Monad[F].bind(fa) { f } 
+      Monad[F].bind(fa) { f }
+
+    def flatMap[B](f: A => F[B]): F[B] = Monad[F].bind(fa) { f }
   }
 
   sealed trait MonadLaws[F[_]] {
@@ -34,10 +34,10 @@ object MonadModule {
     implicit def F: Monad[F]
   
     def leftIdentity[A]: A => (A => F[A]) => Boolean =
-      a => f => (F.`return`(a) >>= f) == f(a)
-    
+      a => f => (F `return` a >>= f) == f(a)
+
     def rightIdentity[A]: F[A] => Boolean =
-      ma => (ma >>= { a => F.`return`(a) }) == ma
+      ma => (ma >>= { a => F `return` a }) == ma
 
     def associativity[A, B, C]: F[A] => (A => F[B]) => (B => F[C]) => Boolean =
       ma => f => g => (ma >>= f >>= g) == (ma >>= (f(_) >>= g))

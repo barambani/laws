@@ -7,8 +7,6 @@ import SemigroupModule.SemigroupInstances._
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Properties, _}
 
-import scala.language.higherKinds
-
 sealed abstract class ApplicativeLawsCheck[F[_] : Applicative, A, B](name: String)(
   implicit
     AA : Arbitrary[A],

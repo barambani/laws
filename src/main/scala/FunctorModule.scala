@@ -1,7 +1,5 @@
 import Algebra._
 
-import scala.language.higherKinds
-
 object FunctorModule {
 
   trait Functor[F[_]] {

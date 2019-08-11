@@ -6,8 +6,6 @@ import MonadModule.{Monad, MonadLaws, MonadLawsNoSyntax}
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Properties, _}
 
-import scala.language.higherKinds
-
 sealed abstract class MonadLawsCheck[F[_] : Monad, A, B, C](name: String)(
   implicit
     AA : Arbitrary[A],

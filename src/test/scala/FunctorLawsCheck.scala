@@ -6,8 +6,6 @@ import FunctorModule.{Functor, FunctorLaws, FunctorLawsNoSyntax}
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Properties, _}
 
-import scala.language.higherKinds
-
 sealed abstract class FunctorLawsCheck[F[_] : Functor, A, B](name: String)(
   implicit
     AFI: Arbitrary[F[A]],

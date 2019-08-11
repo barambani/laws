@@ -6,8 +6,6 @@ import ContravariantModule.{Contravariant, ContravariantLaws, ContravariantLawsN
 import org.scalacheck.Prop.forAll
 import org.scalacheck._
 
-import scala.language.higherKinds
-
 sealed abstract class ContravariantLawsCheck[F[_] : Contravariant, A, B, C](name: String)(
   implicit
     AFA: Arbitrary[F[A]],

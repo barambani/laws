@@ -1,7 +1,5 @@
 import Algebra.{->, Func, Show}
 
-import scala.language.higherKinds
-
 object ContravariantModule {
 
   trait Contravariant[F[_]] {

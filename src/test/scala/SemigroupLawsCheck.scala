@@ -24,6 +24,7 @@ sealed abstract class SemigroupLawsCheck[A : Semigroup](name: String)(
   }
 }
 
-object IntWithAddSemigroupLawsCheck           extends SemigroupLawsCheck[Int]("Int With Addition")
-object StringWithConcatSemigroupLawsCheck     extends SemigroupLawsCheck[String]("String With Concatenation")
-object ListOfIntWithConcatSemigroupLawsCheck  extends SemigroupLawsCheck[List[Int]]("List Of Int With Concatenation")
+object IntWithAddSemigroupLawsCheck             extends SemigroupLawsCheck[Int]("Int With Addition")
+object StringWithConcatSemigroupLawsCheck       extends SemigroupLawsCheck[String]("String With Concatenation")
+object ListOfIntWithConcatSemigroupLawsCheck    extends SemigroupLawsCheck[List[Int]]("List Of Int With Concatenation")
+object ListOfStringWithConcatSemigroupLawsCheck extends SemigroupLawsCheck[List[String]]("List Of String With Concatenation")

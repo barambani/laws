@@ -1,8 +1,19 @@
 import Algebra.{->, Box, Branch, Codec, Func, Leaf, Show, Symbol, Tree}
+import SemigroupModule.Semigroup
 import org.scalacheck.{Arbitrary, Cogen, Gen}
 import shapeless.Lazy
 
 object ArbitraryImplicits {
+
+  implicit def semigroupListArb[A]: Arbitrary[Semigroup[List[A]]] =
+    Arbitrary { Gen.const(
+      Semigroup.newInstance[List[A]]((ls1, ls2) => ls1 ::: ls2)
+    ) }
+
+  implicit def semigroupStringArb: Arbitrary[Semigroup[String]] =
+    Arbitrary { Gen.const(
+      Semigroup.newInstance[String]((s1, s2) => s1 + s2)
+    ) }
 
   implicit def funcToArb[X, R](
     implicit 
@@ -10,9 +21,9 @@ object ArbitraryImplicits {
       AR: Arbitrary[R]): Arbitrary[X -> R] =
     Arbitrary {
       for {
-        x <- AX.arbitrary
+        _ <- AX.arbitrary
         r <- AR.arbitrary
-      } yield Func(x => r)
+      } yield Func(_ => r)
     }
 
   implicit def treeChooser: Arbitrary[Boolean] =
@@ -70,7 +81,7 @@ object ArbitraryImplicits {
     implicit
       AB: Arbitrary[B]): Arbitrary[A => Box[B]] =
     Arbitrary {
-      AB.arbitrary map { b => (a: A) => Box(b) }
+      AB.arbitrary map { b => (_: A) => Box(b) }
     }
 
   implicit def boxTo[A, B](
@@ -84,14 +95,14 @@ object ArbitraryImplicits {
     implicit
       AB: Arbitrary[Box[B]]): Arbitrary[Tree[A] => Box[B]] =
     Arbitrary {
-      AB.arbitrary map { b => (t: Tree[A]) => b }
+      AB.arbitrary map { b => (_: Tree[A]) => b }
     }
 
   implicit def treeTo[A, B](
     implicit
       AB: Arbitrary[B]): Arbitrary[Tree[A] => B] =
     Arbitrary {
-      AB.arbitrary map { b => (t: Tree[A]) => b }
+      AB.arbitrary map { b => (_: Tree[A]) => b }
     }
 
   implicit def symbol(implicit AS: Arbitrary[String]): Arbitrary[Symbol] =

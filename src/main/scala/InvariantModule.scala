@@ -1,6 +1,7 @@
-import scala.language.higherKinds
-
 import Algebra.Codec
+import ContravariantModule.Contravariant
+import FunctorModule.Functor
+import SemigroupModule.Semigroup
 
 object InvariantModule {
 
@@ -55,12 +56,50 @@ object InvariantModule {
       new InvariantLawsNoSyntax[F] { def F = FI }
   }
 
-  object InvariantInstances {
-  
-    implicit val codecInvarian: Invariant[Codec] = 
+  object InvariantInstances extends LowPriorityInstances1 {
+
+    implicit val codecInvariant: Invariant[Codec] =
       new Invariant[Codec] {
         def imap[A, B]: Codec[A] => (A => B) => (B => A) => Codec[B] =
           fa => f => g => Codec.newInstance(fa.encode compose g)(s => fa.decode(s) map f)
+      }
+
+    implicit val semigroupInvariant: Invariant[Semigroup] =
+      new Invariant[Semigroup] {
+        def imap[A, B]: Semigroup[A] => (A => B) => (B => A) => Semigroup[B] =
+          sa => f => g => Semigroup.newInstance[B](
+            (b1, b2) => {
+              println(s"FILIPPO --> $b1")
+              println(s"FILIPPO --> $b2")
+              println
+              println(s"FILIPPO --> ${g(b1)}")
+              println(s"FILIPPO --> ${g(b2)}")
+              println
+              println(s"FILIPPO --> ${sa.combine(g(b1), g(b2))}")
+              println
+              println(s"FILIPPO --> ${f(sa.combine(g(b1), g(b2)))}")
+
+              f(sa.combine(g(b1), g(b2)))
+            }
+          )
+      }
+  }
+
+  sealed trait LowPriorityInstances1 extends LowPriorityInstances2 {
+
+    implicit def functorInvariant[F[_]: Functor]: Invariant[F] =
+      new Invariant[F] {
+        def imap[A, B]: F[A] => (A => B) => (B => A) => F[B] =
+          fa => f => _ => Functor[F].map(fa)(f)
+      }
+  }
+
+  sealed trait LowPriorityInstances2 {
+
+    implicit def contravariantInvariant[F[_]: Contravariant]: Invariant[F] =
+      new Invariant[F] {
+        def imap[A, B]: F[A] => (A => B) => (B => A) => F[B] =
+          fa => _ => g => Contravariant[F].contramap(fa)(g)
       }
   }
 }

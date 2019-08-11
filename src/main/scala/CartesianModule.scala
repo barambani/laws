@@ -1,5 +1,3 @@
-import scala.language.higherKinds
-
 object CartesianModule {
 
   trait Cartesian[F[_]] {

@@ -1,14 +1,9 @@
-import scala.language.higherKinds
-
-import org.scalacheck._
-import org.scalacheck.Prop.forAll
-import InvariantModule.Invariant
-import InvariantModule.InvariantLaws
-import InvariantModule.InvariantLawsNoSyntax
-import InvariantModule.InvariantInstances._
-import Algebra.Codec
-import Algebra.Symbol
+import Algebra.{Codec, Symbol}
 import ArbitraryImplicits._
+import InvariantModule.InvariantInstances._
+import InvariantModule.{Invariant, InvariantLaws, InvariantLawsNoSyntax}
+import org.scalacheck.Prop.forAll
+import org.scalacheck._
 
 sealed abstract class InvariantLawsCheck[F[_] : Invariant, A](name: String)(
   implicit
@@ -21,7 +16,7 @@ sealed abstract class InvariantLawsCheck[F[_] : Invariant, A](name: String)(
   val lawsNoSyntax  = InvariantLawsNoSyntax[F]
 
   property(" Invariant's Imap Preserves Identity") = forAll {
-    (fa: F[A]) => laws.imapPreservesIdentity(fa)
+    fa: F[A] => laws.imapPreservesIdentity(fa)
   }
 
   property(" Invariant's Imap Preserves Composition") = forAll {
@@ -29,7 +24,7 @@ sealed abstract class InvariantLawsCheck[F[_] : Invariant, A](name: String)(
   }
 
   property(" Invariant's Imap Preserves Identity (No Syntax)") = forAll {
-    (fa: F[A]) => lawsNoSyntax.imapPreservesIdentity(fa)
+    fa: F[A] => lawsNoSyntax.imapPreservesIdentity(fa)
   }
 
   property(" Invariant's Imap Preserves Composition (No Syntax)") = forAll {
