@@ -68,19 +68,7 @@ object InvariantModule {
       new Invariant[Semigroup] {
         def imap[A, B]: Semigroup[A] => (A => B) => (B => A) => Semigroup[B] =
           sa => f => g => Semigroup.newInstance[B](
-            (b1, b2) => {
-              println(s"FILIPPO --> $b1")
-              println(s"FILIPPO --> $b2")
-              println
-              println(s"FILIPPO --> ${g(b1)}")
-              println(s"FILIPPO --> ${g(b2)}")
-              println
-              println(s"FILIPPO --> ${sa.combine(g(b1), g(b2))}")
-              println
-              println(s"FILIPPO --> ${f(sa.combine(g(b1), g(b2)))}")
-
-              f(sa.combine(g(b1), g(b2)))
-            }
+            (b1, b2) => f(sa.combine(g(b1), g(b2)))
           )
       }
   }

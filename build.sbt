@@ -2,8 +2,6 @@ import Dependencies._
 
 inThisBuild(Seq(
   scalaVersion          := "2.13.0",
-  coverageMinimum       := 85,
-  coverageFailOnMinimum := true,
   libraryDependencies   ++= externalDependencies
 ))
 
