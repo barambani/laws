@@ -1,7 +1,13 @@
-import Dependencies._
+val externalDependencies = Seq(
+  "com.chuusai"     %% "shapeless"    % "2.3.3",
+  "com.github.ghik" %% "silencer-lib" % "1.4.4" % Provided cross CrossVersion.full,
+  compilerPlugin("com.github.ghik" %% "silencer-plugin" % "1.4.4" cross CrossVersion.full),
+  compilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
+  "org.scalacheck"  %% "scalacheck"   % "1.14.2" % "test"
+)
 
 inThisBuild(Seq(
-  scalaVersion          := "2.13.0",
+  scalaVersion          := "2.13.1",
   libraryDependencies   ++= externalDependencies
 ))
 
@@ -43,7 +49,5 @@ scalacOptions in (Compile, console) --= Seq (
 )
 
 scalacOptions in Test ++= Seq("-Yrangepos")
-
-addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 
 logLevel := Level.Info
