@@ -3,7 +3,7 @@ val externalDependencies = Seq(
   "com.github.ghik" %% "silencer-lib" % "1.4.4" % Provided cross CrossVersion.full,
   compilerPlugin("com.github.ghik" %% "silencer-plugin" % "1.4.4" cross CrossVersion.full),
   compilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
-  "org.scalacheck"  %% "scalacheck"   % "1.14.2" % "test"
+  "org.scalacheck"  %% "scalacheck"   % "1.14.3" % "test"
 )
 
 inThisBuild(Seq(
