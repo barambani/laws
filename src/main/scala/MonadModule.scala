@@ -95,7 +95,7 @@ object MonadModule {
         ma => f => ma flatMap f
     }
 
-    implicit def eitherMonad[E]: Monad[Either[E, ?]] = new Monad[Either[E, ?]] {
+    implicit def eitherMonad[E]: Monad[Either[E, *]] = new Monad[Either[E, *]] {
     
       def `return`[A]: A => Either[E, A] = Right(_)
 
@@ -114,8 +114,8 @@ object MonadModule {
         }
     }
 
-    implicit def functionApplicative[X]: Monad[X -> ?] =
-      new Monad[X -> ?] {
+    implicit def functionApplicative[X]: Monad[X -> *] =
+      new Monad[X -> *] {
 
         def `return`[A]: A => X -> A =
           a => Func(_ => a)

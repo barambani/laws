@@ -64,14 +64,14 @@ object FunctorModule {
           fa => f => fa map f
       }
 
-    implicit def eitherFunctor[E]: Functor[Either[E, ?]] =
-      new Functor[Either[E, ?]] {
+    implicit def eitherFunctor[E]: Functor[Either[E, *]] =
+      new Functor[Either[E, *]] {
         def map[A, B]: Either[E, A] => (A => B) => Either[E, B] =
           fa => f => fa map f
       }
 
-    implicit def functionFunctor[X]: Functor[X -> ?] =
-      new Functor[X -> ?] {
+    implicit def functionFunctor[X]: Functor[X -> *] =
+      new Functor[X -> *] {
         def map[A, B]: (X -> A) => (A => B) => (X -> B) =
           fa => f => Func(f compose fa)
       }

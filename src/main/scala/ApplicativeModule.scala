@@ -103,8 +103,8 @@ object ApplicativeModule {
           }
       }
 
-    implicit def eitherApplicative[E : Semigroup]: Applicative[Either[E, ?]] =
-      new Applicative[Either[E, ?]] {
+    implicit def eitherApplicative[E : Semigroup]: Applicative[Either[E, *]] =
+      new Applicative[Either[E, *]] {
         def pure[A]: A => Either[E, A] =
           a => Right(a)
 
@@ -117,8 +117,8 @@ object ApplicativeModule {
           }
       }
 
-    implicit def functionApplicative[X]: Applicative[X -> ?] =
-      new Applicative[X -> ?] {
+    implicit def functionApplicative[X]: Applicative[X -> *] =
+      new Applicative[X -> *] {
         def pure[A]: A => (X -> A) =
           a => Func(_ => a)
 

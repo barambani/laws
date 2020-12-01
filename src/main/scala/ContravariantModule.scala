@@ -61,8 +61,8 @@ object ContravariantModule {
           }
       }
 
-    implicit def functionContravariant[Y]: Contravariant[? -> Y] =
-      new Contravariant[? -> Y] {
+    implicit def functionContravariant[Y]: Contravariant[* -> Y] =
+      new Contravariant[* -> Y] {
         def contramap[A, B]: (B -> Y) => (A => B) => (A -> Y) =
           fb => f => Func(fb compose f)
       }
