@@ -1,13 +1,11 @@
 val externalDependencies = Seq(
   "com.chuusai"     %% "shapeless"    % "2.3.3",
-  "com.github.ghik" %% "silencer-lib" % "1.6.0" % Provided cross CrossVersion.full,
-  compilerPlugin("com.github.ghik" %% "silencer-plugin" % "1.6.0" cross CrossVersion.full),
-  compilerPlugin("org.typelevel" %% "kind-projector" % "0.11.2" cross CrossVersion.full),
-  "org.scalacheck"  %% "scalacheck"   % "1.15.1" % "test"
+  compilerPlugin("org.typelevel" %% "kind-projector" % "0.11.3" cross CrossVersion.full),
+  "org.scalacheck"  %% "scalacheck"   % "1.15.2" % "test"
 )
 
 inThisBuild(Seq(
-  scalaVersion          := "2.13.1",
+  scalaVersion          := "2.13.4",
   libraryDependencies   ++= externalDependencies
 ))
 
@@ -40,7 +38,8 @@ scalacOptions ++= Seq(
   "-opt-warnings",
   "-Xlint:constant",
   "-Ywarn-extra-implicit",
-  "-opt-inline-from:<source>"
+  "-opt-inline-from:<source>",
+  "-Xlint:-byname-implicit"
 )
 
 scalacOptions in (Compile, console) --= Seq (

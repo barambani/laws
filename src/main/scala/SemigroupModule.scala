@@ -1,5 +1,3 @@
-import com.github.ghik.silencer.silent
-
 object SemigroupModule {
 
   trait Semigroup[A] {
@@ -60,19 +58,7 @@ object SemigroupModule {
 
     implicit val listOfStringWithConcatS: Semigroup[List[String]] =
       new Semigroup[List[String]] {
-
         def combine: (List[String], List[String]) => List[String] = _ ++ _
-
-        @silent override def equals(other: Any): Boolean = {
-          println("HERE")
-          other match {
-            case v: Semigroup[List[String]] =>
-              val equality = { (l1: List[String], l2: List[String]) => v.combine(l1, l2) == combine(l1, l2) }
-              println(equality(List("test1", "test2"), List("test3", "test4")))
-              equality(Nil, Nil) && equality(List("test1", "test2"), List("test3", "test4"))
-
-            case _ => false
-          } }
       }
   }
 }
