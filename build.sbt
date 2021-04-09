@@ -1,5 +1,5 @@
 val externalDependencies = Seq(
-  "com.chuusai"     %% "shapeless"    % "2.3.3",
+  "com.chuusai"     %% "shapeless"    % "2.3.4",
   compilerPlugin("org.typelevel" %% "kind-projector" % "0.11.3" cross CrossVersion.full),
   "org.scalacheck"  %% "scalacheck"   % "1.15.2" % "test"
 )
