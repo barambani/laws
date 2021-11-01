@@ -5,7 +5,7 @@ val externalDependencies = Seq(
 )
 
 inThisBuild(Seq(
-  scalaVersion          := "2.13.4",
+  scalaVersion          := "2.13.7",
   libraryDependencies   ++= externalDependencies
 ))
 
