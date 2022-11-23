@@ -1,5 +1,11 @@
+# This repository is ⚰️ ARCHIVED ⚰️
+
+The last day of operation was on November 23, 2022
+
+<br/>
+
 # Laws
-[![Build Status](https://travis-ci.org/barambani/laws.svg?branch=master)](https://travis-ci.org/barambani/laws)
+
 [![codecov](https://codecov.io/gh/barambani/laws/branch/master/graph/badge.svg)](https://codecov.io/gh/barambani/laws)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/barambani/laws/blob/master/LICENSE)
 
